@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEC2 — امتحان مراجعة عامة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --ink-soft:#283449;
+    --paper:#F7F4EC;
+    --paper-soft:#EFEADC;
+    --teal:#2E7D6B;
+    --teal-soft:#E3EFE9;
+    --rust:#C8553D;
+    --rust-soft:#F6E6E1;
+    --gold:#A88B5C;
+    --line:#D8D2C0;
+    --text:#1B2430;
+    --text-dim:#5B6472;
+    --radius:10px;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Cairo', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.6;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ===== Utility ===== */
+  .hidden{display:none !important;}
+  .screen{min-height:100vh; display:flex; flex-direction:column;}
+  .wrap{max-width:880px; margin:0 auto; padding:0 20px; width:100%;}
+  button{font-family:var(--sans); cursor:pointer; border:none;}
+  input,textarea{font-family:var(--sans);}
+  a{color:inherit;}
+
+  /* ===== Top bar (terminal style) ===== */
+  .topbar{
+    background:var(--ink);
+    color:#fff;
+    padding:14px 0;
+    border-bottom:3px solid var(--gold);
+  }
+  .topbar .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:14px; letter-spacing:0.5px;}
+  .brand .dot{width:10px;height:10px;border-radius:50%; background:var(--teal); box-shadow:0 0 0 3px rgba(46,125,107,0.25);}
+  .brand b{font-family:var(--sans); font-weight:800; font-size:16px;}
+  .session-pill{
+    font-family:var(--mono); font-size:12px; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18); padding:5px 12px; border-radius:20px; color:#D9D2BE;
+  }
+
+  /* ===== Hero / Boot screen ===== */
+  .boot{
+    flex:1; display:flex; align-items:center; justify-content:center;
+    background:var(--ink); color:#fff; padding:60px 20px;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(46,125,107,0.18), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(168,139,92,0.14), transparent 45%);
+  }
+  .boot-card{
+    width:100%; max-width:520px; background:var(--ink-soft);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px; padding:36px 32px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .boot-head{font-family:var(--mono); color:var(--teal); font-size:13px; margin-bottom:6px; display:flex; gap:8px; align-items:center;}
+  .boot-head .blink{animation:blink 1.1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .boot-title{font-size:26px; font-weight:800; margin:6px 0 4px;}
+  .boot-sub{color:#AEB6C3; font-size:14px; margin-bottom:28px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block; font-size:13px; color:#C7CCD6; margin-bottom:7px; font-family:var(--mono);}
+  .field input{
+    width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.05); color:#fff; font-size:15px; outline:none; transition:border-color .15s;
+  }
+  .field input:focus{border-color:var(--teal);}
+  .field input::placeholder{color:#5B6472;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 22px; border-radius:8px; font-weight:700; font-size:15px; transition:transform .12s, opacity .15s;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--teal); color:#fff; width:100%;}
+  .btn-primary:hover{opacity:0.92;}
+  .btn-ghost{background:transparent; color:var(--text-dim); border:1.5px solid var(--line);}
+  .btn-rust{background:var(--rust); color:#fff;}
+  .btn-gold{background:var(--gold); color:#fff;}
+  .err-text{color:#ff8b78; font-size:13px; margin-top:6px; font-family:var(--mono); display:none;}
+
+  /* ===== Exam screen ===== */
+  .exam-header{
+    background:var(--ink); color:#fff; padding:18px 0;
+    position:sticky; top:0; z-index:50; border-bottom:3px solid var(--teal);
+  }
+  .exam-header .wrap{display:flex; flex-direction:column; gap:10px;}
+  .exam-header-row{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+  .student-tag{font-family:var(--mono); font-size:13px; color:#D9D2BE;}
+  .student-tag b{color:#fff;}
+  .progress-track{
+    height:8px; border-radius:6px; background:rgba(255,255,255,0.1); overflow:hidden; width:100%;
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg, var(--teal), #57b39a); width:0%;
+    transition:width .35s ease; border-radius:6px;
+  }
+  .progress-label{font-family:var(--mono); font-size:12px; color:var(--gold); white-space:nowrap;}
+
+  .exam-body{padding:34px 0 90px;}
+  .section-comment{
+    font-family:var(--mono); font-size:13px; color:var(--teal); margin:38px 0 16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .section-comment::before{content:"//"; color:var(--gold);}
+  .section-comment span{height:1px; flex:1; background:var(--line);}
+  .section-title{font-size:21px; font-weight:800; margin:0 0 4px;}
+  .section-points{font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+
+  .q-card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 22px 20px; margin-bottom:18px; position:relative;
+  }
+  .q-gutter{
+    font-family:var(--mono); font-size:12px; color:#fff; background:var(--ink-soft);
+    width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center;
+    position:absolute; top:-14px; right:-10px; font-weight:700;
+    box-shadow:0 4px 10px rgba(27,36,48,0.25);
+  }
+  .q-text{font-size:16px; font-weight:600; margin:6px 0 16px; padding-right:6px; line-height:1.7;}
+  .q-points{font-family:var(--mono); font-size:11px; color:var(--gold); margin-right:8px;}
+
+  .opts{display:flex; flex-direction:column; gap:10px;}
+  .opt{
+    display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:8px;
+    border:1.5px solid var(--line); cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--teal); background:var(--teal-soft);}
+  .opt.selected{border-color:var(--teal); background:var(--teal-soft); font-weight:700;}
+  .opt input{accent-color:var(--teal); margin-top:3px;}
+  .opt-letter{font-family:var(--mono); color:var(--gold); font-weight:700; min-width:18px;}
+
+  .tf-row{display:flex; gap:10px; margin-bottom:12px;}
+  .tf-btn{
+    flex:1; padding:11px; border-radius:8px; border:1.5px solid var(--line); background:#fff;
+    font-weight:700; font-size:14px; transition:all .15s;
+  }
+  .tf-btn.selected.true{border-color:var(--teal); background:var(--teal-soft); color:var(--teal);}
+  .tf-btn.selected.false{border-color:var(--rust); background:var(--rust-soft); color:var(--rust);}
+  .correction-input{
+    width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:8px; font-size:14px;
+    font-family:var(--sans); resize:vertical; min-height:44px;
+  }
+  .correction-input:focus{outline:none; border-color:var(--teal);}
+  .correction-label{font-size:12.5px; color:var(--text-dim); margin-bottom:6px; display:block;}
+
+  textarea.answer-box{
+    width:100%; min-height:90px; padding:13px 14px; border:1.5px solid var(--line); border-radius:8px;
+    font-size:14.5px; resize:vertical; font-family:var(--sans);
+  }
+  textarea.answer-box.code{font-family:var(--mono); direction:ltr; text-align:left; background:#FAFAF6;}
+  textarea.answer-box:focus{outline:none; border-color:var(--teal);}
+
+  .compare-table{width:100%; border-collapse:collapse; margin-top:6px;}
+  .compare-table th, .compare-table td{border:1px solid var(--line); padding:10px; text-align:right; vertical-align:top;}
+  .compare-table th{background:var(--paper-soft); font-family:var(--mono); font-size:12.5px; font-weight:700;}
+  .compare-table td input{
+    width:100%; border:none; background:transparent; font-family:var(--sans); font-size:14px; padding:4px; outline:none;
+  }
+  .compare-table td{padding:6px;}
+
+  .code-block{
+    background:var(--ink); color:#E6E8EB; font-family:var(--mono); font-size:13px; line-height:1.7;
+    padding:18px 20px; border-radius:8px; overflow-x:auto; direction:ltr; text-align:left; margin:14px 0;
+    white-space:pre;
+  }
+  .code-block .cm{color:#7C8B9C;}
+  .code-block .kw{color:#5FB3A3;}
+  .code-block .str{color:#D9A65B;}
+  .code-block .fn{color:#7FB4E0;}
+  .code-block .var{color:#E0AFA0;}
+
+  .sql-table-mini{width:100%; border-collapse:collapse; margin:14px 0; font-size:13px;}
+  .sql-table-mini th, .sql-table-mini td{border:1px solid var(--line); padding:7px 10px; text-align:right;}
+  .sql-table-mini th{background:var(--paper-soft); font-family:var(--mono); font-size:12px;}
+
+  .qsub{margin-top:18px; padding-top:14px; border-top:1px dashed var(--line);}
+  .qsub:first-of-type{margin-top:0; padding-top:0; border-top:none;}
+
+  /* ===== Footer nav ===== */
+  .exam-footer{
+    position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line);
+    padding:14px 0; box-shadow:0 -6px 20px rgba(0,0,0,0.05); z-index:40;
+  }
+  .exam-footer .wrap{display:flex; justify-content:space-between; align-items:center; gap:12px;}
+  .save-hint{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); display:flex; align-items:center; gap:6px;}
+  .save-hint .dot{width:7px;height:7px;border-radius:50%; background:var(--teal);}
+
+  /* ===== Submit screen ===== */
+  .done-screen{
+    flex:1; display:flex; align-items:center; justify-content:center; padding:60px 20px;
+    background:var(--paper);
+  }
+  .done-card{
+    max-width:480px; text-align:center; background:#fff; border:1px solid var(--line);
+    border-radius:14px; padding:46px 34px; box-shadow:0 20px 50px -25px rgba(27,36,48,0.25);
+  }
+  .done-icon{
+    width:64px; height:64px; border-radius:50%; background:var(--teal-soft); color:var(--teal);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:30px;
+  }
+  .done-card h2{font-size:22px; margin:0 0 10px;}
+  .done-card p{color:var(--text-dim); font-size:14.5px; margin-bottom:8px;}
+  .done-status{
+    font-family:var(--mono); font-size:12.5px; margin-top:18px; padding:10px 14px; border-radius:8px;
+    background:var(--paper-soft); color:var(--text-dim);
+  }
+
+  @media (max-width:640px){
+    .boot-card{padding:28px 22px;}
+    .q-card{padding:18px 16px;}
+    .compare-table{font-size:12.5px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SCREEN 1: STUDENT LOGIN / BOOT ============ -->
+<div id="screen-login" class="screen">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="dot"></span><b>SEC2</b><span style="opacity:0.5">— مراجعة عامة</span></div>
+      <div class="session-pill">29 يونيو 2026</div>
+    </div>
+  </div>
+  <div class="boot">
+    <div class="boot-card">
+      <div class="boot-head"><span>$</span><span>init exam_session<span class="blink">_</span></span></div>
+      <div class="boot-title">امتحان مراجعة عامة — SEC2</div>
+      <div class="boot-sub">تطوير الويب وقواعد البيانات · أدخلي اسمك للبدء</div>
+
+      <div class="field">
+        <label>اسم الطالب</label>
+        <input type="text" id="studentNameInput" placeholder="مثال: شهد شمس الدين" autocomplete="off">
+        <div class="err-text" id="nameErr">من فضلك أدخلي اسمك للبدء.</div>
+      </div>
+
+      <button class="btn btn-primary" onclick="startExam()">بدء الامتحان ←</button>
+      <div style="margin-top:18px; font-family:var(--mono); font-size:11.5px; color:#7A8392; text-align:center;">
+        الإجابات تُحفظ تلقائياً أثناء الحل
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 2: EXAM ============ -->
+<div id="screen-exam" class="screen hidden">
+  <div class="exam-header">
+    <div class="wrap">
+      <div class="exam-header-row">
+        <div class="student-tag">الطالب: <b id="examStudentName">—</b></div>
+        <div class="progress-label" id="progressLabel">0 / 0</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+
+  <div class="exam-body">
+    <div class="wrap" id="examContent"><!-- injected by JS --></div>
+  </div>
+
+  <div class="exam-footer">
+    <div class="wrap">
+      <div class="save-hint"><span class="dot"></span> تم الحفظ تلقائياً</div>
+      <button class="btn btn-rust" onclick="confirmSubmit()">تسليم الامتحان ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 3: DONE ============ -->
+<div id="screen-done" class="screen hidden">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="dot"></span><b>SEC2</b></div>
+    </div>
+  </div>
+  <div class="done-screen">
+    <div class="done-card">
+      <div class="done-icon">✓</div>
+      <h2>تم تسليم الامتحان بنجاح</h2>
+      <p>شكراً لك <b id="doneName"></b>، تم استلام إجاباتك.</p>
+      <p style="font-size:13px;">سيتم مراجعة إجاباتك من قِبل المعلم.</p>
+      <div class="done-status" id="doneStatus">جاري إرسال النتيجة للمعلم...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIG
+========================================================= */
+const TELEGRAM_BOT_TOKEN = "PUT_YOUR_BOT_TOKEN_HERE";
+const TELEGRAM_CHAT_ID = "PUT_YOUR_CHAT_ID_HERE";
+const STORAGE_KEY_PREFIX = "sec2exam_";
+
+/* =========================================================
+   EXAM DATA MODEL
+========================================================= */
+const EXAM = {
+  sections: [
+    {
+      title: "السؤال الأول: اختر الإجابة الصحيحة",
+      points: 10,
+      type: "mcq",
+      questions: [
+        {
+          id: "q1_1",
+          text: "أي من التالي يُعد مثالاً على صفحة ويب ساكنة؟",
+          points: 2,
+          options: [
+            {key:"أ", text:"صفحة تعرض نتائج بحث من قاعدة بيانات."},
+            {key:"ب", text:"صفحة تسجيل دخول تتفاعل مع الخادم."},
+            {key:"ج", text:"صفحة HTML تعرض معلومات ثابتة عن شركة."},
+            {key:"د", text:"صفحة تعرض محتوى متغيراً بناءً على تفاعل المستخدم."}
+          ],
+          correct: "ج"
+        },
+        {
+          id: "q1_2",
+          text: "ما هو الدور الأساسي لـ Apache Server في بيئة تطوير الويب المحلية؟",
+          points: 2,
+          options: [
+            {key:"أ", text:"إدارة قواعد البيانات."},
+            {key:"ب", text:"ترجمة كود PHP وتشغيل صفحات الويب."},
+            {key:"ج", text:"تحرير كود HTML."},
+            {key:"د", text:"رفع الملفات إلى الخادم البعيد."}
+          ],
+          correct: "ب"
+        },
+        {
+          id: "q1_3",
+          text: "أي من حزم تطبيقات الويب التالية مخصص للعمل على نظام التشغيل Windows؟",
+          points: 2,
+          options: [
+            {key:"أ", text:"LAMP"},
+            {key:"ب", text:"MAMP"},
+            {key:"ج", text:"WAMP"},
+            {key:"د", text:"XAMPP (يعمل على أنظمة متعددة)"}
+          ],
+          correct: "ج"
+        },
+        {
+          id: "q1_4",
+          text: "في قاعدة البيانات العلائقية، ما هو المصطلح الذي يصف الصف الواحد في الجدول؟",
+          points: 2,
+          options: [
+            {key:"أ", text:"Field"},
+            {key:"ب", text:"Table"},
+            {key:"ج", text:"Record"},
+            {key:"د", text:"Primary Key"}
+          ],
+          correct: "ج"
+        },
+        {
+          id: "q1_5",
+          text: "عند وجود علاقة Many to Many بين جدولين، كيف يتم التعامل معها في تصميم قاعدة البيانات؟",
+          points: 2,
+          options: [
+            {key:"أ", text:"يتم تحويلها إلى علاقة One to One."},
+            {key:"ب", text:"يتم استخدام جدول ربط (Linking Table) لتفكيكها إلى علاقتين One to Many."},
+            {key:"ج", text:"يتم دمج الجدولين في جدول واحد."},
+            {key:"د", text:"لا يمكن تمثيل هذا النوع من العلاقات."}
+          ],
+          correct: "ب"
+        }
+      ]
+    },
+    {
+      title: "السؤال الثاني: صح أو خطأ مع تصحيح الخطأ",
+      points: 10,
+      type: "truefalse",
+      questions: [
+        {
+          id: "q2_1",
+          text: "لغات البرمجة من نوع Client-side تُنفذ على الخادم قبل إرسال الصفحة للمتصفح.",
+          points: 2,
+          correct: false,
+          keywords: ["متصفح","client","تنفذ على المتصفح","client-side"]
+        },
+        {
+          id: "q2_2",
+          text: "المفتاح الأساسي (Primary Key) يجب أن يكون فريداً ولا يتكرر في الجدول الواحد.",
+          points: 2,
+          correct: true,
+          keywords: []
+        },
+        {
+          id: "q2_3",
+          text: "وظيفة $_SESSION في PHP هي تخزين بيانات المستخدم بشكل دائم في قاعدة البيانات.",
+          points: 2,
+          correct: false,
+          keywords: ["مؤقت","ذاكرة","server","خادم","ليس دائم","جلسة"]
+        },
+        {
+          id: "q2_4",
+          text: "VarChar هو نوع بيانات يستخدم لتخزين الأرقام الصحيحة فقط.",
+          points: 2,
+          correct: false,
+          keywords: ["نص","حروف","string","text"]
+        },
+        {
+          id: "q2_5",
+          text: "استخدام include أو require في PHP يساعد على تقليل تكرار الكود في المشروع.",
+          points: 2,
+          correct: true,
+          keywords: []
+        }
+      ]
+    },
+    {
+      title: "السؤال الثالث: أسئلة مقالية",
+      points: 20,
+      type: "essay",
+      questions: [
+        {
+          id: "q3_1",
+          type: "compare-table",
+          text: "قارن بين صفحة الويب الساكنة وصفحة الويب الديناميكية من حيث طريقة التنفيذ، المحتوى، واللغات المستخدمة.",
+          points: 8,
+          rows: ["طريقة التنفيذ","المحتوى","اللغات المستخدمة"],
+          cols: ["صفحة الويب الساكنة","صفحة الويب الديناميكية"],
+          keywords: ["ثابت","متغير","خادم","قاعدة بيانات","html","php","تفاعل"]
+        },
+        {
+          id: "q3_2",
+          type: "text",
+          text: "اشرح مفهوم المفتاح الأجنبي (Foreign Key) ودوره في بناء العلاقات بين الجداول، مع ذكر مثال توضيحي.",
+          points: 6,
+          keywords: ["foreign key","علاقة","ربط","جدول آخر","primary key","مثال"]
+        },
+        {
+          id: "q3_3",
+          type: "text",
+          text: "ما أهمية استخدام Localhost في مرحلة تطوير مواقع الويب قبل نشرها؟ واذكر برنامجاً واحداً يساعد في إعداد بيئة الخادم المحلي.",
+          points: 6,
+          keywords: ["اختبار","قبل النشر","xampp","wamp","mamp","تجربة","أخطاء"]
+        }
+      ]
+    },
+    {
+      title: "السؤال الرابع: تحليل كود PHP (مبسّط)",
+      points: 12,
+      type: "essay",
+      intro_code: `<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name'] ?? '');
+    $desc = trim($_POST['desc'] ?? '');
+
+    if (empty($name)) {
+        $errors[] = 'اسم المصطلح مطلوب';
+    } elseif (mb_strlen($name, 'UTF-8') > 255) {
+        $errors[] = 'الاسم طويل جداً';
+    }
+
+    if (empty($errors)) {
+        // حفظ البيانات في قاعدة البيانات
+    }
+}
+?>`,
+      questions: [
+        {
+          id: "q4_1",
+          type: "text",
+          text: "ما الغرض من استخدام trim() و empty() و mb_strlen() في هذا الكود؟",
+          points: 6,
+          keywords: ["تنظيف","فراغات","فارغ","طول النص","تحقق"]
+        },
+        {
+          id: "q4_2",
+          type: "text",
+          text: "ما الآلية المستخدمة للتحقق من صحة المدخلات (Validation)؟ وماذا يحدث إذا وُجدت أخطاء؟",
+          points: 6,
+          keywords: ["مصفوفة","errors","شرط","if","لا يتم الحفظ","رسالة خطأ"]
+        }
+      ]
+    },
+    {
+      title: "السؤال الخامس: استعلامات SQL (مبسّط)",
+      points: 12,
+      type: "sql",
+      tableInfo: {
+        name: "terms",
+        fields: [
+          {field:"id", type:"INTEGER", index:"PRIMARY"},
+          {field:"name", type:"VARCHAR(255)", index:""},
+          {field:"description", type:"TEXT", index:""},
+          {field:"category", type:"VARCHAR(100)", index:""}
+        ]
+      },
+      questions: [
+        {
+          id: "q5_1",
+          type: "code",
+          text: "اكتب استعلام SQL لإنشاء جدول terms (إن لم يكن موجوداً) مع id كمفتاح أساسي تلقائي الزيادة.",
+          points: 6,
+          keywords: ["create table","primary key","auto_increment","if not exists"]
+        },
+        {
+          id: "q5_2",
+          type: "code",
+          text: "اكتب استعلام SQL لإضافة مصطلح جديد باسم Artificial Intelligence وتصنيف ai.",
+          points: 6,
+          keywords: ["insert into","values"]
+        }
+      ]
+    },
+    {
+      title: "السؤال السادس: منطق برمجي",
+      points: 10,
+      type: "essay",
+      questions: [
+        {
+          id: "q6_1",
+          type: "text",
+          text: "لماذا يُفضل استخدام PDO بدلاً من mysql_connect() القديمة عند التعامل مع قواعد البيانات؟",
+          points: 5,
+          keywords: ["أمان","prepared statement","حماية","sql injection","غير مدعوم","قديم"]
+        },
+        {
+          id: "q6_2",
+          type: "text",
+          text: "ما وظيفة دالة فحص تسجيل الدخول (مثل يجب_ان_يكون_معلماً) وكيف تساهم في حماية صفحات معينة بالتطبيق؟",
+          points: 5,
+          keywords: ["جلسة","session","صلاحية","توجيه","redirect","حماية","تحقق"]
+        }
+      ]
+    }
+  ]
+};
+
+/* =========================================================
+   STATE
+========================================================= */
+let currentStudent = null;
+let answers = {};
+
+function flattenQuestions(){
+  let list = [];
+  EXAM.sections.forEach((sec, sIdx) => {
+    sec.questions.forEach((q, qIdx) => {
+      list.push({sec, secIdx:sIdx, q, qIdx});
+    });
+  });
+  return list;
+}
+const ALL_Q = flattenQuestions();
+const TOTAL_POINTS = EXAM.sections.reduce((s,sec)=>s+sec.points,0);
+
+/* =========================================================
+   STORAGE HELPERS (draft-only — autosave while solving, in case of accidental refresh)
+========================================================= */
+function saveDraft(){
+  if(!currentStudent) return;
+  try{
+    localStorage.setItem(STORAGE_KEY_PREFIX+"draft_"+currentStudent, JSON.stringify(answers));
+  }catch(e){ /* storage unavailable — ignore, Telegram is the source of truth */ }
+}
+function loadDraft(name){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_PREFIX+"draft_"+name) || "{}");
+  }catch(e){ return {}; }
+}
+function clearDraft(name){
+  try{ localStorage.removeItem(STORAGE_KEY_PREFIX+"draft_"+name); }catch(e){}
+}
+
+/* =========================================================
+   SCREEN SWITCHING
+========================================================= */
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+/* =========================================================
+   STUDENT FLOW
+========================================================= */
+function startExam(){
+  const input = document.getElementById("studentNameInput");
+  const name = input.value.trim();
+  const err = document.getElementById("nameErr");
+  if(!name){
+    err.style.display = "block";
+    return;
+  }
+  err.style.display = "none";
+  currentStudent = name;
+  answers = loadDraft(name);
+  document.getElementById("examStudentName").textContent = name;
+  renderExam();
+  show("screen-exam");
+}
+
+function escapeHtml(str){
+  if(typeof str !== "string") return str;
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function renderExam(){
+  const container = document.getElementById("examContent");
+  let html = "";
+
+  EXAM.sections.forEach(sec => {
+    html += `<div class="section-comment"><span>${escapeHtml(sec.title)}</span></div>`;
+    html += `<div class="section-points">${sec.points} درجة</div>`;
+
+    if(sec.intro_code){
+      html += `<div class="code-block">${escapeHtml(sec.intro_code)}</div>`;
+    }
+    if(sec.tableInfo){
+      html += renderTableInfo(sec.tableInfo);
+    }
+
+    sec.questions.forEach((q, idx) => {
+      html += `<div class="q-card">`;
+      html += `<div class="q-gutter">${idx+1}</div>`;
+      html += `<div class="q-text">${escapeHtml(q.text)}<span class="q-points">(${q.points} د)</span></div>`;
+
+      if(sec.type === "mcq"){
+        html += renderMcq(q);
+      } else if(sec.type === "truefalse"){
+        html += renderTrueFalse(q);
+      } else if(q.type === "compare-table"){
+        html += renderCompareTable(q);
+      } else if(q.type === "code"){
+        html += renderCodeAnswer(q);
+      } else {
+        html += renderTextAnswer(q);
+      }
+
+      html += `</div>`;
+    });
+  });
+
+  container.innerHTML = html;
+  attachListeners();
+  updateProgress();
+}
+
+function renderMcq(q){
+  let html = `<div class="opts" data-qid="${q.id}">`;
+  q.options.forEach(opt => {
+    const selected = answers[q.id] === opt.key ? "selected" : "";
+    html += `
+      <label class="opt ${selected}" data-key="${opt.key}">
+        <input type="radio" name="${q.id}" value="${opt.key}" ${answers[q.id]===opt.key?"checked":""}>
+        <span class="opt-letter">(${opt.key})</span>
+        <span>${escapeHtml(opt.text)}</span>
+      </label>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function renderTrueFalse(q){
+  const ans = answers[q.id] || {};
+  const tfVal = ans.tf;
+  let html = `
+    <div class="tf-row" data-qid="${q.id}">
+      <button class="tf-btn true ${tfVal===true?'selected true':''}" data-val="true">✓ صح</button>
+      <button class="tf-btn false ${tfVal===false?'selected false':''}" data-val="false">✗ خطأ</button>
+    </div>
+    <label class="correction-label">التصحيح (إن كانت العبارة خطأ):</label>
+    <textarea class="correction-input" data-qid="${q.id}" placeholder="اكتب التصحيح هنا...">${escapeHtml(ans.correction || "")}</textarea>
+  `;
+  return html;
+}
+
+function renderTextAnswer(q){
+  const val = answers[q.id] || "";
+  return `<textarea class="answer-box" data-qid="${q.id}" placeholder="اكتب إجابتك هنا...">${escapeHtml(val)}</textarea>`;
+}
+
+function renderCodeAnswer(q){
+  const val = answers[q.id] || "";
+  return `<textarea class="answer-box code" data-qid="${q.id}" placeholder="-- اكتب استعلام SQL هنا">${escapeHtml(val)}</textarea>`;
+}
+
+function renderCompareTable(q){
+  const val = answers[q.id] || {};
+  let html = `<table class="compare-table"><thead><tr><th>وجه المقارنة</th>`;
+  q.cols.forEach(c => html += `<th>${escapeHtml(c)}</th>`);
+  html += `</tr></thead><tbody>`;
+  q.rows.forEach((row, rIdx) => {
+    html += `<tr><th>${escapeHtml(row)}</th>`;
+    q.cols.forEach((col, cIdx) => {
+      const cellKey = `${rIdx}_${cIdx}`;
+      const cellVal = val[cellKey] || "";
+      html += `<td><input type="text" data-qid="${q.id}" data-cell="${cellKey}" value="${escapeHtml(cellVal)}"></td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  return html;
+}
+
+function renderTableInfo(info){
+  let html = `<div style="font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-bottom:6px;">جدول ${escapeHtml(info.name)}:</div>`;
+  html += `<table class="sql-table-mini"><thead><tr><th>Field</th><th>Type</th><th>Index</th></tr></thead><tbody>`;
+  info.fields.forEach(f => {
+    html += `<tr><td>${escapeHtml(f.field)}</td><td>${escapeHtml(f.type)}</td><td>${escapeHtml(f.index)}</td></tr>`;
+  });
+  html += `</tbody></table>`;
+  return html;
+}
+
+function attachListeners(){
+  // MCQ
+  document.querySelectorAll(".opts").forEach(group => {
+    const qid = group.dataset.qid;
+    group.querySelectorAll(".opt").forEach(opt => {
+      opt.addEventListener("click", () => {
+        answers[qid] = opt.dataset.key;
+        group.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected"));
+        opt.classList.add("selected");
+        opt.querySelector("input").checked = true;
+        saveDraft();
+        updateProgress();
+      });
+    });
+  });
+
+  // True/False
+  document.querySelectorAll(".tf-row").forEach(row => {
+    const qid = row.dataset.qid;
+    row.querySelectorAll(".tf-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const val = btn.dataset.val === "true";
+        if(!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
+        answers[qid].tf = val;
+        row.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("selected","true","false"));
+        btn.classList.add("selected", btn.dataset.val === "true" ? "true" : "false");
+        saveDraft();
+        updateProgress();
+      });
+    });
+  });
+
+  // Correction textareas
+  document.querySelectorAll(".correction-input").forEach(ta => {
+    ta.addEventListener("input", () => {
+      const qid = ta.dataset.qid;
+      if(!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
+      answers[qid].correction = ta.value;
+      saveDraft();
+    });
+  });
+
+  // Text / code answers
+  document.querySelectorAll(".answer-box").forEach(ta => {
+    ta.addEventListener("input", () => {
+      answers[ta.dataset.qid] = ta.value;
+      saveDraft();
+      updateProgress();
+    });
+  });
+
+  // Compare table cells
+  document.querySelectorAll(".compare-table input").forEach(inp => {
+    inp.addEventListener("input", () => {
+      const qid = inp.dataset.qid;
+      const cell = inp.dataset.cell;
+      if(!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
+      answers[qid][cell] = inp.value;
+      saveDraft();
+      updateProgress();
+    });
+  });
+}
+
+function isAnswered(qid){
+  const a = answers[qid];
+  if(a === undefined || a === null) return false;
+  if(typeof a === "string") return a.trim().length > 0;
+  if(typeof a === "object"){
+    return Object.keys(a).some(k => {
+      const v = a[k];
+      if(typeof v === "boolean") return true;
+      if(typeof v === "string") return v.trim().length>0;
+      return !!v;
+    });
+  }
+  return false;
+}
+
+function updateProgress(){
+  const total = ALL_Q.length;
+  const done = ALL_Q.filter(item => isAnswered(item.q.id)).length;
+  document.getElementById("progressLabel").textContent = `${done} / ${total}`;
+  document.getElementById("progressFill").style.width = `${(done/total)*100}%`;
+}
+
+/* =========================================================
+   GRADING ENGINE
+========================================================= */
+function gradeSubmission(studentAnswers){
+  let totalScore = 0;
+  let results = [];
+
+  EXAM.sections.forEach(sec => {
+    sec.questions.forEach(q => {
+      let item = {
+        id: q.id, text: q.text, maxPoints: q.points,
+        studentAnswer: studentAnswers[q.id], status: "review", earnedPoints: 0
+      };
+
+      if(sec.type === "mcq"){
+        const ans = studentAnswers[q.id];
+        if(ans === q.correct){
+          item.earnedPoints = q.points; item.status = "ok";
+        } else if(ans){
+          item.earnedPoints = 0; item.status = "bad";
+        } else {
+          item.earnedPoints = 0; item.status = "bad"; item.studentAnswer = "(لم يُجب)";
+        }
+        item.correctAnswer = q.correct;
+      }
+      else if(sec.type === "truefalse"){
+        const ans = studentAnswers[q.id] || {};
+        const tfCorrect = ans.tf === q.correct;
+        let half = q.points / 2;
+        let earned = 0;
+        if(tfCorrect){
+          earned += half;
+          if(q.correct === false){
+            // needs correction text — check keywords loosely
+            const corr = (ans.correction || "").toLowerCase();
+            const hasKeyword = q.keywords.some(k => corr.includes(k.toLowerCase()));
+            if(hasKeyword || corr.trim().length > 8){
+              earned += half;
+              item.status = "ok";
+            } else {
+              item.status = "review";
+            }
+          } else {
+            earned += half;
+            item.status = "ok";
+          }
+        } else {
+          item.status = "bad";
+        }
+        item.earnedPoints = Math.round(earned*10)/10;
+        item.studentAnswer = (ans.tf===true?"صح":ans.tf===false?"خطأ":"(لم يُجب)") + (ans.correction ? " — تصحيح: "+ans.correction : "");
+        item.correctAnswer = q.correct ? "صح" : "خطأ";
+      }
+      else if(q.type === "compare-table"){
+        const ans = studentAnswers[q.id] || {};
+        const allText = Object.values(ans).join(" ").trim().toLowerCase();
+        if(!allText){
+          item.earnedPoints = 0; item.status = "bad"; item.studentAnswer = "(لم يُجب)";
+        } else {
+          const matches = q.keywords.filter(k => allText.includes(k.toLowerCase())).length;
+          const ratio = q.keywords.length ? matches / q.keywords.length : 0;
+          item.earnedPoints = Math.round(q.points * Math.min(ratio + 0.15, 1) * 10)/10;
+          item.status = "review";
+          item.studentAnswer = "(جدول مُعبأ — راجع التفاصيل)";
+        }
+      }
+      else { // text or code
+        const rawAns = studentAnswers[q.id];
+        const ans = (rawAns || "").toString().trim().toLowerCase();
+        if(!ans){
+          item.earnedPoints = 0; item.status = "bad"; item.studentAnswer = "(لم يُجب)";
+        } else {
+          const matches = q.keywords.filter(k => ans.includes(k.toLowerCase())).length;
+          const ratio = q.keywords.length ? matches / q.keywords.length : 0.5;
+          item.earnedPoints = Math.round(q.points * Math.min(ratio + 0.2, 1) * 10)/10;
+          item.status = "review"; // always flagged for teacher review per requirements
+        }
+      }
+
+      totalScore += item.earnedPoints;
+      results.push(item);
+    });
+  });
+
+  return { totalScore: Math.round(totalScore*10)/10, maxScore: TOTAL_POINTS, results };
+}
+
+/* =========================================================
+   SUBMIT FLOW
+========================================================= */
+function confirmSubmit(){
+  const total = ALL_Q.length;
+  const done = ALL_Q.filter(item => isAnswered(item.q.id)).length;
+  let msg = "هل أنتِ متأكدة من تسليم الامتحان؟ لا يمكن التعديل بعد التسليم.";
+  if(done < total){
+    msg = `لم تُجيبي على ${total-done} سؤال/أسئلة بعد. ${msg}`;
+  }
+  if(confirm(msg)){
+    submitExam();
+  }
+}
+
+async function submitExam(){
+  const graded = gradeSubmission(answers);
+  const submission = {
+    student: currentStudent,
+    timestamp: new Date().toISOString(),
+    answers: JSON.parse(JSON.stringify(answers)),
+    autoGrade: graded
+  };
+
+  clearDraft(currentStudent);
+
+  document.getElementById("doneName").textContent = currentStudent;
+  show("screen-done");
+
+  const statusEl = document.getElementById("doneStatus");
+  const sent = await sendToTelegram(submission);
+  statusEl.textContent = sent
+    ? "تم إرسال الإجابات والنتيجة للمعلم بنجاح ✓"
+    : "تنبيه: تعذّر إرسال النتيجة لتيليجرام. يرجى إخبار المعلم.";
+}
+
+/* =========================================================
+   TELEGRAM INTEGRATION
+========================================================= */
+function statusEmoji(status){
+  if(status === "ok") return "✅";
+  if(status === "bad") return "❌";
+  return "🟡"; // review
+}
+
+function buildTelegramMessages(sub){
+  const g = sub.autoGrade;
+  const header = [
+    `📝 *امتحان مراجعة SEC2*`,
+    `👤 الطالب: *${escapeMd(sub.student)}*`,
+    `🕐 الوقت: ${escapeMd(new Date(sub.timestamp).toLocaleString('ar-EG'))}`,
+    `📊 الدرجة التلقائية التقريبية: *${g.totalScore} / ${g.maxScore}*`,
+    ``,
+    `🟡 = يحتاج مراجعتك اليدوية   ✅ = صحيحة تلقائياً   ❌ = خاطئة`,
+    `━━━━━━━━━━━━━━━`
+  ].join("\n");
+
+  // Build one block per question
+  const blocks = g.results.map((r, idx) => {
+    let lines = [];
+    lines.push(`${statusEmoji(r.status)} *${idx+1}. ${escapeMd(r.text)}* (${r.maxPoints} د — حصل على ${r.earnedPoints})`);
+    lines.push(`↳ إجابة الطالب: ${escapeMd(String(r.studentAnswer))}`);
+    if(r.correctAnswer !== undefined){
+      lines.push(`↳ الإجابة الصحيحة: ${escapeMd(String(r.correctAnswer))}`);
+    }
+    return lines.join("\n");
+  });
+
+  // Pack blocks into messages under Telegram's ~4096 char limit (use 3500 to be safe)
+  const LIMIT = 3500;
+  let messages = [];
+  let current = header;
+  blocks.forEach(block => {
+    if((current + "\n\n" + block).length > LIMIT){
+      messages.push(current);
+      current = block;
+    } else {
+      current += "\n\n" + block;
+    }
+  });
+  messages.push(current);
+
+  // Footer reminder on the last message
+  messages[messages.length-1] += `\n\n━━━━━━━━━━━━━━━\n⚠️ راجع الأسئلة 🟡 يدوياً (الدرجة أعلاه تقريبية لهذه الأسئلة).`;
+
+  return messages;
+}
+
+function escapeMd(str){
+  return (str||"").toString().replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
+}
+
+async function sendToTelegram(sub){
+  if(!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.includes("PUT_YOUR")) return false;
+  try{
+    const messages = buildTelegramMessages(sub);
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    for(const text of messages){
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: "Markdown" })
+      });
+      if(!res.ok) return false;
+    }
+    return true;
+  }catch(e){
+    console.error("Telegram send failed", e);
+    return false;
+  }
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  // nothing extra needed; default screen is login
+});
+</script>
+</body>
+</html>
