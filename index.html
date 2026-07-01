@@ -3,231 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEC2 — امتحان مراجعة عامة</title>
+<title>SEC2 — امتحان النموذج الثاني</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1B2430;
-    --ink-soft:#283449;
-    --paper:#F7F4EC;
-    --paper-soft:#EFEADC;
-    --teal:#2E7D6B;
-    --teal-soft:#E3EFE9;
-    --rust:#C8553D;
-    --rust-soft:#F6E6E1;
-    --gold:#A88B5C;
-    --line:#D8D2C0;
-    --text:#1B2430;
-    --text-dim:#5B6472;
-    --radius:10px;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Cairo', sans-serif;
+    --ink:#1B2430; --ink-soft:#283449; --paper:#F7F4EC; --paper-soft:#EFEADC;
+    --teal:#2E7D6B; --teal-soft:#E3EFE9; --rust:#C8553D; --rust-soft:#F6E6E1;
+    --gold:#A88B5C; --line:#D8D2C0; --text:#1B2430; --text-dim:#5B6472;
+    --radius:10px; --mono:'JetBrains Mono',monospace; --sans:'Cairo',sans-serif;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{
-    font-family:var(--sans);
-    background:var(--paper);
-    color:var(--text);
-    min-height:100vh;
-    line-height:1.6;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
-  }
+  body{font-family:var(--sans);background:var(--paper);color:var(--text);min-height:100vh;line-height:1.6;}
+  @media(prefers-reduced-motion:reduce){*{animation-duration:0.001ms!important;transition-duration:0.001ms!important;}}
+  .hidden{display:none!important;}
+  .screen{min-height:100vh;display:flex;flex-direction:column;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px;width:100%;}
+  button{font-family:var(--sans);cursor:pointer;border:none;}
+  input,textarea,select{font-family:var(--sans);}
 
-  /* ===== Utility ===== */
-  .hidden{display:none !important;}
-  .screen{min-height:100vh; display:flex; flex-direction:column;}
-  .wrap{max-width:880px; margin:0 auto; padding:0 20px; width:100%;}
-  button{font-family:var(--sans); cursor:pointer; border:none;}
-  input,textarea{font-family:var(--sans);}
-  a{color:inherit;}
+  /* topbar */
+  .topbar{background:var(--ink);color:#fff;padding:14px 0;border-bottom:3px solid var(--gold);}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:14px;}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(46,125,107,0.25);}
+  .brand b{font-family:var(--sans);font-weight:800;font-size:16px;}
+  .session-pill{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:5px 12px;border-radius:20px;color:#D9D2BE;}
 
-  /* ===== Top bar (terminal style) ===== */
-  .topbar{
-    background:var(--ink);
-    color:#fff;
-    padding:14px 0;
-    border-bottom:3px solid var(--gold);
-  }
-  .topbar .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px;}
-  .brand{display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:14px; letter-spacing:0.5px;}
-  .brand .dot{width:10px;height:10px;border-radius:50%; background:var(--teal); box-shadow:0 0 0 3px rgba(46,125,107,0.25);}
-  .brand b{font-family:var(--sans); font-weight:800; font-size:16px;}
-  .session-pill{
-    font-family:var(--mono); font-size:12px; background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.18); padding:5px 12px; border-radius:20px; color:#D9D2BE;
-  }
-
-  /* ===== Hero / Boot screen ===== */
-  .boot{
-    flex:1; display:flex; align-items:center; justify-content:center;
-    background:var(--ink); color:#fff; padding:60px 20px;
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(46,125,107,0.18), transparent 45%),
-      radial-gradient(circle at 85% 80%, rgba(168,139,92,0.14), transparent 45%);
-  }
-  .boot-card{
-    width:100%; max-width:520px; background:var(--ink-soft);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:14px; padding:36px 32px;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
-  }
-  .boot-head{font-family:var(--mono); color:var(--teal); font-size:13px; margin-bottom:6px; display:flex; gap:8px; align-items:center;}
-  .boot-head .blink{animation:blink 1.1s steps(1) infinite;}
+  /* boot */
+  .boot{flex:1;display:flex;align-items:center;justify-content:center;background:var(--ink);color:#fff;padding:60px 20px;
+    background-image:radial-gradient(circle at 15% 20%,rgba(46,125,107,0.18),transparent 45%),radial-gradient(circle at 85% 80%,rgba(168,139,92,0.14),transparent 45%);}
+  .boot-card{width:100%;max-width:520px;background:var(--ink-soft);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:36px 32px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);}
+  .boot-head{font-family:var(--mono);color:var(--teal);font-size:13px;margin-bottom:6px;display:flex;gap:8px;align-items:center;}
+  .blink{animation:blink 1.1s steps(1) infinite;}
   @keyframes blink{50%{opacity:0;}}
-  .boot-title{font-size:26px; font-weight:800; margin:6px 0 4px;}
-  .boot-sub{color:#AEB6C3; font-size:14px; margin-bottom:28px;}
+  .boot-title{font-size:26px;font-weight:800;margin:6px 0 4px;}
+  .boot-sub{color:#AEB6C3;font-size:14px;margin-bottom:28px;}
   .field{margin-bottom:18px;}
-  .field label{display:block; font-size:13px; color:#C7CCD6; margin-bottom:7px; font-family:var(--mono);}
-  .field input{
-    width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid rgba(255,255,255,0.15);
-    background:rgba(255,255,255,0.05); color:#fff; font-size:15px; outline:none; transition:border-color .15s;
-  }
+  .field label{display:block;font-size:13px;color:#C7CCD6;margin-bottom:7px;font-family:var(--mono);}
+  .field input{width:100%;padding:13px 14px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:15px;outline:none;transition:border-color .15s;}
   .field input:focus{border-color:var(--teal);}
   .field input::placeholder{color:#5B6472;}
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:13px 22px; border-radius:8px; font-weight:700; font-size:15px; transition:transform .12s, opacity .15s;
-  }
+  .err-text{color:#ff8b78;font-size:13px;margin-top:6px;font-family:var(--mono);display:none;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:8px;font-weight:700;font-size:15px;transition:transform .12s,opacity .15s;}
   .btn:active{transform:scale(0.98);}
-  .btn-primary{background:var(--teal); color:#fff; width:100%;}
+  .btn-primary{background:var(--teal);color:#fff;width:100%;}
   .btn-primary:hover{opacity:0.92;}
-  .btn-ghost{background:transparent; color:var(--text-dim); border:1.5px solid var(--line);}
-  .btn-rust{background:var(--rust); color:#fff;}
-  .btn-gold{background:var(--gold); color:#fff;}
-  .err-text{color:#ff8b78; font-size:13px; margin-top:6px; font-family:var(--mono); display:none;}
+  .btn-ghost{background:transparent;color:var(--text-dim);border:1.5px solid var(--line);}
+  .btn-rust{background:var(--rust);color:#fff;}
 
-  /* ===== Exam screen ===== */
-  .exam-header{
-    background:var(--ink); color:#fff; padding:18px 0;
-    position:sticky; top:0; z-index:50; border-bottom:3px solid var(--teal);
+  /* live tracker badge */
+  .tracker-badge{
+    display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;
+    padding:4px 10px;border-radius:20px;background:rgba(168,139,92,0.15);border:1px solid rgba(168,139,92,0.35);color:var(--gold);
   }
-  .exam-header .wrap{display:flex; flex-direction:column; gap:10px;}
-  .exam-header-row{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;}
-  .student-tag{font-family:var(--mono); font-size:13px; color:#D9D2BE;}
+  .tracker-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
+
+  /* exam header */
+  .exam-header{background:var(--ink);color:#fff;padding:18px 0;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--teal);}
+  .exam-header .wrap{display:flex;flex-direction:column;gap:10px;}
+  .exam-header-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .student-tag{font-family:var(--mono);font-size:13px;color:#D9D2BE;}
   .student-tag b{color:#fff;}
-  .progress-track{
-    height:8px; border-radius:6px; background:rgba(255,255,255,0.1); overflow:hidden; width:100%;
-  }
-  .progress-fill{
-    height:100%; background:linear-gradient(90deg, var(--teal), #57b39a); width:0%;
-    transition:width .35s ease; border-radius:6px;
-  }
-  .progress-label{font-family:var(--mono); font-size:12px; color:var(--gold); white-space:nowrap;}
+  .progress-track{height:8px;border-radius:6px;background:rgba(255,255,255,0.1);overflow:hidden;width:100%;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),#57b39a);width:0%;transition:width .35s ease;border-radius:6px;}
+  .progress-label{font-family:var(--mono);font-size:12px;color:var(--gold);white-space:nowrap;}
 
-  .exam-body{padding:34px 0 90px;}
-  .section-comment{
-    font-family:var(--mono); font-size:13px; color:var(--teal); margin:38px 0 16px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .section-comment::before{content:"//"; color:var(--gold);}
-  .section-comment span{height:1px; flex:1; background:var(--line);}
-  .section-title{font-size:21px; font-weight:800; margin:0 0 4px;}
-  .section-points{font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+  /* exam body */
+  .exam-body{padding:34px 0 100px;}
+  .section-comment{font-family:var(--mono);font-size:13px;color:var(--teal);margin:38px 0 16px;display:flex;align-items:center;gap:10px;}
+  .section-comment::before{content:"//";color:var(--gold);}
+  .section-comment span{height:1px;flex:1;background:var(--line);}
+  .section-points{font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:18px;}
 
-  .q-card{
-    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
-    padding:22px 22px 20px; margin-bottom:18px; position:relative;
-  }
-  .q-gutter{
-    font-family:var(--mono); font-size:12px; color:#fff; background:var(--ink-soft);
-    width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center;
-    position:absolute; top:-14px; right:-10px; font-weight:700;
-    box-shadow:0 4px 10px rgba(27,36,48,0.25);
-  }
-  .q-text{font-size:16px; font-weight:600; margin:6px 0 16px; padding-right:6px; line-height:1.7;}
-  .q-points{font-family:var(--mono); font-size:11px; color:var(--gold); margin-right:8px;}
+  .q-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 22px 20px;margin-bottom:18px;position:relative;transition:border-color .2s,box-shadow .2s;}
+  .q-card.active{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,125,107,0.1);}
+  .q-card.answered{border-right:4px solid var(--teal);}
+  .q-gutter{font-family:var(--mono);font-size:12px;color:#fff;background:var(--ink-soft);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;position:absolute;top:-14px;right:-10px;font-weight:700;box-shadow:0 4px 10px rgba(27,36,48,0.25);}
+  .q-text{font-size:16px;font-weight:600;margin:6px 0 16px;padding-right:6px;line-height:1.7;}
+  .q-points{font-family:var(--mono);font-size:11px;color:var(--gold);margin-right:8px;}
+  .q-time{font-family:var(--mono);font-size:11px;color:var(--text-dim);float:left;}
 
-  .opts{display:flex; flex-direction:column; gap:10px;}
-  .opt{
-    display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:8px;
-    border:1.5px solid var(--line); cursor:pointer; transition:border-color .15s, background .15s;
-  }
-  .opt:hover{border-color:var(--teal); background:var(--teal-soft);}
-  .opt.selected{border-color:var(--teal); background:var(--teal-soft); font-weight:700;}
-  .opt input{accent-color:var(--teal); margin-top:3px;}
-  .opt-letter{font-family:var(--mono); color:var(--gold); font-weight:700; min-width:18px;}
+  /* options */
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);cursor:pointer;transition:border-color .15s,background .15s;}
+  .opt:hover{border-color:var(--teal);background:var(--teal-soft);}
+  .opt.selected{border-color:var(--teal);background:var(--teal-soft);font-weight:700;}
+  .opt input{accent-color:var(--teal);margin-top:3px;}
+  .opt-letter{font-family:var(--mono);color:var(--gold);font-weight:700;min-width:18px;}
 
-  .tf-row{display:flex; gap:10px; margin-bottom:12px;}
-  .tf-btn{
-    flex:1; padding:11px; border-radius:8px; border:1.5px solid var(--line); background:#fff;
-    font-weight:700; font-size:14px; transition:all .15s;
-  }
-  .tf-btn.selected.true{border-color:var(--teal); background:var(--teal-soft); color:var(--teal);}
-  .tf-btn.selected.false{border-color:var(--rust); background:var(--rust-soft); color:var(--rust);}
-  .correction-input{
-    width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:8px; font-size:14px;
-    font-family:var(--sans); resize:vertical; min-height:44px;
-  }
-  .correction-input:focus{outline:none; border-color:var(--teal);}
-  .correction-label{font-size:12.5px; color:var(--text-dim); margin-bottom:6px; display:block;}
+  /* text/code answers */
+  textarea.answer-box{width:100%;min-height:90px;padding:13px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:14.5px;resize:vertical;font-family:var(--sans);}
+  textarea.answer-box:focus{outline:none;border-color:var(--teal);}
+  textarea.answer-box.code{font-family:var(--mono);direction:ltr;text-align:left;background:#FAFAF6;}
+  .type-label{font-size:12px;color:var(--text-dim);margin-bottom:7px;display:block;font-family:var(--mono);}
 
-  textarea.answer-box{
-    width:100%; min-height:90px; padding:13px 14px; border:1.5px solid var(--line); border-radius:8px;
-    font-size:14.5px; resize:vertical; font-family:var(--sans);
-  }
-  textarea.answer-box.code{font-family:var(--mono); direction:ltr; text-align:left; background:#FAFAF6;}
-  textarea.answer-box:focus{outline:none; border-color:var(--teal);}
-
-  .compare-table{width:100%; border-collapse:collapse; margin-top:6px;}
-  .compare-table th, .compare-table td{border:1px solid var(--line); padding:10px; text-align:right; vertical-align:top;}
-  .compare-table th{background:var(--paper-soft); font-family:var(--mono); font-size:12.5px; font-weight:700;}
-  .compare-table td input{
-    width:100%; border:none; background:transparent; font-family:var(--sans); font-size:14px; padding:4px; outline:none;
-  }
+  /* compare table */
+  .compare-table{width:100%;border-collapse:collapse;margin-top:6px;}
+  .compare-table th,.compare-table td{border:1px solid var(--line);padding:10px;text-align:right;vertical-align:top;}
+  .compare-table th{background:var(--paper-soft);font-family:var(--mono);font-size:12.5px;font-weight:700;}
   .compare-table td{padding:6px;}
+  .compare-table td textarea{width:100%;border:none;background:transparent;font-family:var(--sans);font-size:13.5px;padding:4px;outline:none;resize:vertical;min-height:52px;}
 
-  .code-block{
-    background:var(--ink); color:#E6E8EB; font-family:var(--mono); font-size:13px; line-height:1.7;
-    padding:18px 20px; border-radius:8px; overflow-x:auto; direction:ltr; text-align:left; margin:14px 0;
-    white-space:pre;
-  }
-  .code-block .cm{color:#7C8B9C;}
-  .code-block .kw{color:#5FB3A3;}
-  .code-block .str{color:#D9A65B;}
-  .code-block .fn{color:#7FB4E0;}
-  .code-block .var{color:#E0AFA0;}
+  /* code block display */
+  .code-block{background:var(--ink);color:#E6E8EB;font-family:var(--mono);font-size:13px;line-height:1.7;padding:18px 20px;border-radius:8px;overflow-x:auto;direction:ltr;text-align:left;margin:14px 0;white-space:pre;}
 
-  .sql-table-mini{width:100%; border-collapse:collapse; margin:14px 0; font-size:13px;}
-  .sql-table-mini th, .sql-table-mini td{border:1px solid var(--line); padding:7px 10px; text-align:right;}
-  .sql-table-mini th{background:var(--paper-soft); font-family:var(--mono); font-size:12px;}
+  /* sub-questions */
+  .qsub{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);}
 
-  .qsub{margin-top:18px; padding-top:14px; border-top:1px dashed var(--line);}
-  .qsub:first-of-type{margin-top:0; padding-top:0; border-top:none;}
+  /* footer */
+  .exam-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:14px 0;box-shadow:0 -6px 20px rgba(0,0,0,0.05);z-index:40;}
+  .exam-footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .save-hint{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
+  .save-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
 
-  /* ===== Footer nav ===== */
-  .exam-footer{
-    position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line);
-    padding:14px 0; box-shadow:0 -6px 20px rgba(0,0,0,0.05); z-index:40;
-  }
-  .exam-footer .wrap{display:flex; justify-content:space-between; align-items:center; gap:12px;}
-  .save-hint{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); display:flex; align-items:center; gap:6px;}
-  .save-hint .dot{width:7px;height:7px;border-radius:50%; background:var(--teal);}
+  /* done screen */
+  .done-screen{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px;background:var(--paper);}
+  .done-card{max-width:480px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:46px 34px;box-shadow:0 20px 50px -25px rgba(27,36,48,0.25);}
+  .done-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:30px;}
+  .done-card h2{font-size:22px;margin:0 0 10px;}
+  .done-card p{color:var(--text-dim);font-size:14.5px;margin-bottom:8px;}
+  .done-status{font-family:var(--mono);font-size:12.5px;margin-top:18px;padding:10px 14px;border-radius:8px;background:var(--paper-soft);color:var(--text-dim);}
 
-  /* ===== Submit screen ===== */
-  .done-screen{
-    flex:1; display:flex; align-items:center; justify-content:center; padding:60px 20px;
-    background:var(--paper);
-  }
-  .done-card{
-    max-width:480px; text-align:center; background:#fff; border:1px solid var(--line);
-    border-radius:14px; padding:46px 34px; box-shadow:0 20px 50px -25px rgba(27,36,48,0.25);
-  }
-  .done-icon{
-    width:64px; height:64px; border-radius:50%; background:var(--teal-soft); color:var(--teal);
-    display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:30px;
-  }
-  .done-card h2{font-size:22px; margin:0 0 10px;}
-  .done-card p{color:var(--text-dim); font-size:14.5px; margin-bottom:8px;}
-  .done-status{
-    font-family:var(--mono); font-size:12.5px; margin-top:18px; padding:10px 14px; border-radius:8px;
-    background:var(--paper-soft); color:var(--text-dim);
-  }
-
-  @media (max-width:640px){
+  @media(max-width:640px){
     .boot-card{padding:28px 22px;}
     .q-card{padding:18px 16px;}
     .compare-table{font-size:12.5px;}
@@ -236,29 +136,27 @@
 </head>
 <body>
 
-<!-- ============ SCREEN 1: STUDENT LOGIN / BOOT ============ -->
+<!-- ============ SCREEN 1: LOGIN ============ -->
 <div id="screen-login" class="screen">
   <div class="topbar">
     <div class="wrap">
-      <div class="brand"><span class="dot"></span><b>SEC2</b><span style="opacity:0.5">— مراجعة عامة</span></div>
-      <div class="session-pill">29 يونيو 2026</div>
+      <div class="brand"><span class="dot"></span><b>SEC2</b><span style="opacity:0.5">— النموذج الثاني</span></div>
+      <div class="session-pill">30 يونيو 2026</div>
     </div>
   </div>
   <div class="boot">
     <div class="boot-card">
-      <div class="boot-head"><span>$</span><span>init exam_session<span class="blink">_</span></span></div>
-      <div class="boot-title">امتحان مراجعة عامة — SEC2</div>
-      <div class="boot-sub">تطوير الويب وقواعد البيانات · أدخلي اسمك للبدء</div>
-
+      <div class="boot-head"><span>$</span><span>init exam_session --model=2<span class="blink">_</span></span></div>
+      <div class="boot-title">امتحان مراجعة — النموذج الثاني</div>
+      <div class="boot-sub">مادة SEC2 · أدخلي اسمك للبدء</div>
       <div class="field">
         <label>اسم الطالب</label>
         <input type="text" id="studentNameInput" placeholder="مثال: شهد شمس الدين" autocomplete="off">
         <div class="err-text" id="nameErr">من فضلك أدخلي اسمك للبدء.</div>
       </div>
-
       <button class="btn btn-primary" onclick="startExam()">بدء الامتحان ←</button>
-      <div style="margin-top:18px; font-family:var(--mono); font-size:11.5px; color:#7A8392; text-align:center;">
-        الإجابات تُحفظ تلقائياً أثناء الحل
+      <div style="margin-top:16px;font-family:var(--mono);font-size:11.5px;color:#7A8392;text-align:center;">
+        📡 سيتم إخطار المعلم فور بدء الامتحان
       </div>
     </div>
   </div>
@@ -270,19 +168,20 @@
     <div class="wrap">
       <div class="exam-header-row">
         <div class="student-tag">الطالب: <b id="examStudentName">—</b></div>
-        <div class="progress-label" id="progressLabel">0 / 0</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="tracker-badge"><span class="pulse"></span>مباشر</div>
+          <div class="progress-label" id="progressLabel">0 / 0</div>
+        </div>
       </div>
       <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     </div>
   </div>
-
   <div class="exam-body">
-    <div class="wrap" id="examContent"><!-- injected by JS --></div>
+    <div class="wrap" id="examContent"></div>
   </div>
-
   <div class="exam-footer">
     <div class="wrap">
-      <div class="save-hint"><span class="dot"></span> تم الحفظ تلقائياً</div>
+      <div class="save-hint"><span class="save-dot"></span>يُتابَع مباشرة</div>
       <button class="btn btn-rust" onclick="confirmSubmit()">تسليم الامتحان ✓</button>
     </div>
   </div>
@@ -301,413 +200,556 @@
       <h2>تم تسليم الامتحان بنجاح</h2>
       <p>شكراً لك <b id="doneName"></b>، تم استلام إجاباتك.</p>
       <p style="font-size:13px;">سيتم مراجعة إجاباتك من قِبل المعلم.</p>
-      <div class="done-status" id="doneStatus">جاري إرسال النتيجة للمعلم...</div>
+      <div class="done-status" id="doneStatus">جاري إرسال التسليم النهائي...</div>
     </div>
   </div>
 </div>
 
 <script>
-/* =========================================================
-   CONFIG
-========================================================= */
-const TELEGRAM_BOT_TOKEN = "";
-const TELEGRAM_CHAT_ID = "";
-const STORAGE_KEY_PREFIX = "";
+/* ==============================================
+   CONFIG — ضع هنا بيانات البوت بتاعك
+============================================== */
+const TELEGRAM_BOT_TOKEN = "8888997856:AAELxk8TtopV2IyCzgywShkn9DHHXVqJnLI";
+const TELEGRAM_CHAT_ID   = "1840535062";
 
-/* =========================================================
-   EXAM DATA MODEL
-========================================================= */
+/* ==============================================
+   EXAM DATA
+============================================== */
 const EXAM = {
+  title: "امتحان مراجعة عامة — النموذج الثاني",
+  date: "01 يوليو 2026",
   sections: [
     {
-      title: "السؤال الأول: اختر الإجابة الصحيحة",
-      points: 10,
-      type: "mcq",
+      id: "s1",
+      title: "السؤال الأول: المصطلحات والمفاهيم",
+      points: 25,
       questions: [
         {
-          id: "q1_1",
-          text: "أي من التالي يُعد مثالاً على صفحة ويب ساكنة؟",
-          points: 2,
-          options: [
-            {key:"أ", text:"صفحة تعرض نتائج بحث من قاعدة بيانات."},
-            {key:"ب", text:"صفحة تسجيل دخول تتفاعل مع الخادم."},
-            {key:"ج", text:"صفحة HTML تعرض معلومات ثابتة عن شركة."},
-            {key:"د", text:"صفحة تعرض محتوى متغيراً بناءً على تفاعل المستخدم."}
-          ],
-          correct: "ج"
+          id: "q1_1", type: "text", points: 5,
+          text: "وضح المقصود بـ: الخادم كبرمجيات (Server Software)",
+          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
+          keywords: ["خادم","server","برنامج","طلبات","apache","nginx","استجابة"]
         },
         {
-          id: "q1_2",
-          text: "ما هو الدور الأساسي لـ Apache Server في بيئة تطوير الويب المحلية؟",
-          points: 2,
-          options: [
-            {key:"أ", text:"إدارة قواعد البيانات."},
-            {key:"ب", text:"ترجمة كود PHP وتشغيل صفحات الويب."},
-            {key:"ج", text:"تحرير كود HTML."},
-            {key:"د", text:"رفع الملفات إلى الخادم البعيد."}
-          ],
-          correct: "ب"
+          id: "q1_2", type: "text", points: 5,
+          text: "وضح المقصود بـ: لغات البرمجة من نوع Server-side",
+          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
+          keywords: ["خادم","server","تنفيذ","php","python","قبل","إرسال","متصفح"]
         },
         {
-          id: "q1_3",
-          text: "أي من حزم تطبيقات الويب التالية مخصص للعمل على نظام التشغيل Windows؟",
-          points: 2,
-          options: [
-            {key:"أ", text:"LAMP"},
-            {key:"ب", text:"MAMP"},
-            {key:"ج", text:"WAMP"},
-            {key:"د", text:"XAMPP (يعمل على أنظمة متعددة)"}
-          ],
-          correct: "ج"
+          id: "q1_3", type: "text", points: 5,
+          text: "وضح المقصود بـ: المفتاح المركب (Composite Key)",
+          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
+          keywords: ["عمودين","حقلين","composite","مفتاح","فريد","أكثر من","تركيب"]
         },
         {
-          id: "q1_4",
-          text: "في قاعدة البيانات العلائقية، ما هو المصطلح الذي يصف الصف الواحد في الجدول؟",
-          points: 2,
-          options: [
-            {key:"أ", text:"Field"},
-            {key:"ب", text:"Table"},
-            {key:"ج", text:"Record"},
-            {key:"د", text:"Primary Key"}
-          ],
-          correct: "ج"
+          id: "q1_4", type: "text", points: 5,
+          text: "وضح المقصود بـ: المفتاح الأجنبي (Foreign Key) الذي يربط بين جدولين ويمنع تكرار البيانات.",
+          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
+          keywords: ["مفتاح أجنبي","foreign key","يربط","جدولين","علاقة","تكرار","primary key","يشير"]
         },
         {
-          id: "q1_5",
-          text: "عند وجود علاقة Many to Many بين جدولين، كيف يتم التعامل معها في تصميم قاعدة البيانات؟",
-          points: 2,
-          options: [
-            {key:"أ", text:"يتم تحويلها إلى علاقة One to One."},
-            {key:"ب", text:"يتم استخدام جدول ربط (Linking Table) لتفكيكها إلى علاقتين One to Many."},
-            {key:"ج", text:"يتم دمج الجدولين في جدول واحد."},
-            {key:"د", text:"لا يمكن تمثيل هذا النوع من العلاقات."}
-          ],
-          correct: "ب"
+          id: "q1_5", type: "text", points: 5,
+          text: "ما هو الفرق الأساسي بين الخادم (Server) والعميل (Client)؟",
+          placeholder: "اكتب الفرق بإيجاز...",
+          keywords: ["خادم","عميل","client","server","يستضيف","يطلب","يعرض","متصفح","يخزن البيانات"]
         }
       ]
     },
     {
-      title: "السؤال الثاني: صح أو خطأ مع تصحيح الخطأ",
-      points: 10,
-      type: "truefalse",
+      id: "s2",
+      title: "السؤال الثاني: صل من العمود (أ) ما يناسبه من العمود (ب)",
+      points: 15,
       questions: [
         {
-          id: "q2_1",
-          text: "لغات البرمجة من نوع Client-side تُنفذ على الخادم قبل إرسال الصفحة للمتصفح.",
-          points: 2,
-          correct: false,
-          keywords: ["متصفح","client","تنفذ على المتصفح","client-side"]
-        },
-        {
-          id: "q2_2",
-          text: "المفتاح الأساسي (Primary Key) يجب أن يكون فريداً ولا يتكرر في الجدول الواحد.",
-          points: 2,
-          correct: true,
-          keywords: []
-        },
-        {
-          id: "q2_3",
-          text: "وظيفة $_SESSION في PHP هي تخزين بيانات المستخدم بشكل دائم في قاعدة البيانات.",
-          points: 2,
-          correct: false,
-          keywords: ["مؤقت","ذاكرة","server","خادم","ليس دائم","جلسة"]
-        },
-        {
-          id: "q2_4",
-          text: "VarChar هو نوع بيانات يستخدم لتخزين الأرقام الصحيحة فقط.",
-          points: 2,
-          correct: false,
-          keywords: ["نص","حروف","string","text"]
-        },
-        {
-          id: "q2_5",
-          text: "استخدام include أو require في PHP يساعد على تقليل تكرار الكود في المشروع.",
-          points: 2,
-          correct: true,
-          keywords: []
+          id: "q2_match", type: "matching", points: 15,
+          text: "صل كل مصطلح في العمود (أ) بما يناسبه من التعريف في العمود (ب):",
+          pairs: [
+            { left: "PHP", right: "لغة برمجة تعمل من جهة الخادم (Server-side)" },
+            { left: "Localhost", right: "العنوان المستخدم لتشغيل الموقع محلياً" },
+            { left: "Text", right: "نوع بيانات للنصوص الطويلة جداً" },
+            { left: "MySQL", right: "نظام إدارة قواعد البيانات" },
+            { left: "Aptana Studio", right: "برنامج محرر كود" }
+          ]
         }
       ]
     },
     {
-      title: "السؤال الثالث: أسئلة مقالية",
+      id: "s3",
+      title: "السؤال الثالث: المقارنات والتحليل",
+      points: 15,
+      questions: [
+        {
+          id: "q3_1", type: "compare-table", points: 10,
+          text: "قارن بين أنواع العلاقات التالية في قواعد البيانات:",
+          rows: ["One to Many","Many to Many"],
+          cols: ["كيفية الربط ومكان المفتاح الأجنبي","مثال من واقع مشروع القاموس"],
+          keywords: ["foreign key","linking table","جدول ربط","one to many","مفتاح أجنبي"]
+        },
+        {
+          id: "q3_2", type: "text", points: 5,
+          text: "اذكر ثلاثة أسباب جعلت المنهج يختار تطبيق MySQL لإنشاء قواعد البيانات في هذا المشروع.",
+          placeholder: "السبب الأول:\nالسبب الثاني:\nالسبب الثالث:",
+          keywords: ["مجاني","مفتوح","سريع","شائع","xampp","php","دعم","سهل"]
+        }
+      ]
+    },
+    {
+      id: "s4",
+      title: "السؤال الرابع: بيئة التطوير",
+      points: 17,
+      questions: [
+        {
+          id: "q4_1", type: "text", points: 6,
+          text: "ما هي المكونات الأربعة الأساسية التي توفرها حزمة XAMPP؟ وماذا يرمز كل حرف فيها؟",
+          placeholder: "X = \nA = \nM = \nP = \nP = ",
+          keywords: ["apache","mysql","php","perl","cross","linux","windows"]
+        },
+        {
+          id: "q4_2", type: "text", points: 4,
+          text: "لماذا نحتاج إلى استخدام http://localhost عند تشغيل صفحات PHP، ولا يمكننا فتحها مباشرة كملفات HTML؟",
+          placeholder: "اكتب السبب التقني...",
+          keywords: ["خادم","server","تفسير","تنفيذ","php","معالجة","apache","بروتوكول"]
+        },
+        {
+          id: "q4_3", type: "text", points: 3,
+          text: "ما اسم حزمة الويب التي تعمل على نظام الماك (Mac)؟",
+          placeholder: "اكتب اسم الحزمة...",
+          keywords: ["mamp","mac","ماك"]
+        },
+        {
+          id: "q4_4", type: "text", points: 4,
+          text: "تنقسم صفحات الويب إلى نوعين، اذكرهما ووضح الفرق بينهما بإيجاز.",
+          placeholder: "النوع الأول:\nالنوع الثاني:\nالفرق:",
+          keywords: ["ثابتة","متغيرة","ديناميكية","static","dynamic","html","php","تفاعل","تتغير"]
+        }
+      ]
+    },
+    {
+      id: "s5",
+      title: "السؤال الخامس: تحليل الكود والمنطق",
       points: 20,
-      type: "essay",
-      questions: [
-        {
-          id: "q3_1",
-          type: "compare-table",
-          text: "قارن بين صفحة الويب الساكنة وصفحة الويب الديناميكية من حيث طريقة التنفيذ، المحتوى، واللغات المستخدمة.",
-          points: 8,
-          rows: ["طريقة التنفيذ","المحتوى","اللغات المستخدمة"],
-          cols: ["صفحة الويب الساكنة","صفحة الويب الديناميكية"],
-          keywords: ["ثابت","متغير","خادم","قاعدة بيانات","html","php","تفاعل"]
-        },
-        {
-          id: "q3_2",
-          type: "text",
-          text: "اشرح مفهوم المفتاح الأجنبي (Foreign Key) ودوره في بناء العلاقات بين الجداول، مع ذكر مثال توضيحي.",
-          points: 6,
-          keywords: ["foreign key","علاقة","ربط","جدول آخر","primary key","مثال"]
-        },
-        {
-          id: "q3_3",
-          type: "text",
-          text: "ما أهمية استخدام Localhost في مرحلة تطوير مواقع الويب قبل نشرها؟ واذكر برنامجاً واحداً يساعد في إعداد بيئة الخادم المحلي.",
-          points: 6,
-          keywords: ["اختبار","قبل النشر","xampp","wamp","mamp","تجربة","أخطاء"]
-        }
-      ]
-    },
-    {
-      title: "السؤال الرابع: تحليل كود PHP (مبسّط)",
-      points: 12,
-      type: "essay",
-      intro_code: `<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
-    $desc = trim($_POST['desc'] ?? '');
+      introCode: `function بحث_في_المصطلحات($قاعدة_البيانات, $كلمة_البحث, $التصنيف = '') {
+    $استعلام = "SELECT * FROM terms WHERE (name LIKE :search OR description LIKE :search2)";
+    $المعاملات = [
+        ':search'  => '%' . $كلمة_البحث . '%',
+        ':search2' => '%' . $كلمة_البحث . '%',
+    ];
 
-    if (empty($name)) {
-        $errors[] = 'اسم المصطلح مطلوب';
-    } elseif (mb_strlen($name, 'UTF-8') > 255) {
-        $errors[] = 'الاسم طويل جداً';
+    if (!empty($التصنيف)) {
+        $استعلام .= " AND category = :category";
+        $المعاملات[':category'] = $التصنيف;
     }
 
-    if (empty($errors)) {
-        // حفظ البيانات في قاعدة البيانات
-    }
-}
-?>`,
+    $استعلام .= " ORDER BY name ASC";
+    $جملة = $قاعدة_البيانات->prepare($استعلام);
+    $جملة->execute($المعاملات);
+    return $جملة->fetchAll();
+}`,
       questions: [
         {
-          id: "q4_1",
-          type: "text",
-          text: "ما الغرض من استخدام trim() و empty() و mb_strlen() في هذا الكود؟",
-          points: 6,
-          keywords: ["تنظيف","فراغات","فارغ","طول النص","تحقق"]
+          id: "q5_1", type: "text", points: 5,
+          text: "ما وظيفة الرمز % المستخدم في مصفوفة $المعاملات؟",
+          placeholder: "اشرح وظيفة % في LIKE...",
+          keywords: ["wildcard","أي حروف","بحث جزئي","أي نص","like","بداية","نهاية"]
         },
         {
-          id: "q4_2",
-          type: "text",
-          text: "ما الآلية المستخدمة للتحقق من صحة المدخلات (Validation)؟ وماذا يحدث إذا وُجدت أخطاء؟",
-          points: 6,
-          keywords: ["مصفوفة","errors","شرط","if","لا يتم الحفظ","رسالة خطأ"]
+          id: "q5_2", type: "text", points: 5,
+          text: "لماذا يتم استخدام prepare() و execute() بدلاً من إرسال الاستعلام مباشرة؟",
+          placeholder: "اشرح السبب التقني والأمني...",
+          keywords: ["sql injection","حماية","prepared","أمان","معاملات","injection","هجوم"]
+        },
+        {
+          id: "q5_3", type: "text", points: 10,
+          text: "اشرح كيف يتعامل الكود مع حالة اختيار المستخدم لتصنيف معين أثناء البحث.",
+          placeholder: "اشرح المنطق البرمجي خطوة بخطوة...",
+          keywords: ["empty","if","category","يضاف","شرط","AND","معامل إضافي","التصنيف"]
         }
       ]
     },
     {
-      title: "السؤال الخامس: استعلامات SQL (مبسّط)",
-      points: 12,
-      type: "sql",
-      tableInfo: {
-        name: "terms",
-        fields: [
-          {field:"id", type:"INTEGER", index:"PRIMARY"},
-          {field:"name", type:"VARCHAR(255)", index:""},
-          {field:"description", type:"TEXT", index:""},
-          {field:"category", type:"VARCHAR(100)", index:""}
-        ]
-      },
+      id: "s6",
+      title: "السؤال السادس: قواعد البيانات وSQL",
+      points: 27,
       questions: [
         {
-          id: "q5_1",
-          type: "code",
-          text: "اكتب استعلام SQL لإنشاء جدول terms (إن لم يكن موجوداً) مع id كمفتاح أساسي تلقائي الزيادة.",
-          points: 6,
-          keywords: ["create table","primary key","auto_increment","if not exists"]
+          id: "q6_1", type: "code", points: 6,
+          text: "اكتب استعلام SQL لحذف المصطلح الذي يحمل الاسم 'Legacy System' من جدول terms.",
+          placeholder: "-- اكتب استعلام DELETE هنا",
+          keywords: ["delete from","where","name","legacy system"]
         },
         {
-          id: "q5_2",
-          type: "code",
-          text: "اكتب استعلام SQL لإضافة مصطلح جديد باسم Artificial Intelligence وتصنيف ai.",
-          points: 6,
-          keywords: ["insert into","values"]
+          id: "q6_2", type: "code", points: 7,
+          text: "اكتب استعلام SQL لجلب جميع المصطلحات من تصنيف 'networks' مرتبة تنازلياً حسب date_added.",
+          placeholder: "-- اكتب استعلام SELECT هنا",
+          keywords: ["select","from terms","where","category","networks","order by","desc","date_added"]
+        },
+        {
+          id: "q6_3", type: "code", points: 7,
+          text: "اكتب استعلام SQL لإضافة حقل 'عدد مرات مشاهدة المصطلح' إلى جدول terms مع تحديد نوع البيانات المناسب.",
+          placeholder: "-- اكتب استعلام ALTER TABLE هنا",
+          keywords: ["alter table","add","int","integer","views","default","0"]
+        },
+        {
+          id: "q6_4", type: "code", points: 7,
+          text: "اكتب استعلام SQL للبحث عن جميع المصطلحات التي تبدأ بحرف 'A' في جدول terms.",
+          placeholder: "-- اكتب استعلام SELECT مع LIKE هنا",
+          keywords: ["select","from terms","where","name like","'a%'","like"]
         }
       ]
     },
     {
-      title: "السؤال السادس: منطق برمجي",
-      points: 10,
-      type: "essay",
+      id: "s7",
+      title: "السؤال السابع: الربط والتكامل",
+      points: 20,
       questions: [
         {
-          id: "q6_1",
-          type: "text",
-          text: "لماذا يُفضل استخدام PDO بدلاً من mysql_connect() القديمة عند التعامل مع قواعد البيانات؟",
-          points: 5,
-          keywords: ["أمان","prepared statement","حماية","sql injection","غير مدعوم","قديم"]
+          id: "q7_1", type: "text", points: 10,
+          text: "في ملف db.php يتم استخدام try...catch. ما فائدة هذا التركيب عند محاولة الاتصال بقاعدة البيانات؟",
+          placeholder: "اشرح الفائدة بالتفصيل...",
+          keywords: ["خطأ","exception","استثناء","اتصال فاشل","معالجة","رسالة","يتوقف","catch","try"]
         },
         {
-          id: "q6_2",
-          type: "text",
-          text: "ما وظيفة دالة فحص تسجيل الدخول (مثل يجب_ان_يكون_معلماً) وكيف تساهم في حماية صفحات معينة بالتطبيق؟",
-          points: 5,
-          keywords: ["جلسة","session","صلاحية","توجيه","redirect","حماية","تحقق"]
+          id: "q7_2", type: "text", points: 10,
+          text: "اشرح كيف تستخدم $_POST في login.php للتحقق من بيانات المستخدم، وكيف يتم منع الوصول لـ manage.php إذا لم يكن المستخدم معلماً.",
+          placeholder: "اشرح آلية تسجيل الدخول والحماية...",
+          keywords: ["post","session","جلسة","redirect","header","تحقق","password","حماية","معلم"]
+        }
+      ]
+    },
+    {
+      id: "s8",
+      title: "السؤال الثامن: تصميم القاموس",
+      points: 20,
+      questions: [
+        {
+          id: "q8_1", type: "text", points: 10,
+          text: "جدول المصطلحات في المشروع يحتوي على حقل للصورة باسم image. هل يتم تخزين 'ملف الصورة' نفسه داخل قاعدة البيانات أم 'اسم الملف' فقط؟ ولماذا؟",
+          placeholder: "اكتب إجابتك مع التعليل...",
+          keywords: ["اسم الملف","filename","مسار","path","لا يُخزن","حجم كبير","أداء","performance","مجلد","uploads"]
+        },
+        {
+          id: "q8_2", type: "text", points: 10,
+          text: "اذكر فائدة واحدة لاستخدام 'التصنيفات' (Categories) للمصطلحات في الموقع.",
+          placeholder: "اكتب الفائدة...",
+          keywords: ["تسهيل البحث","تصنيف","تنظيم","سهولة التصفح","فلترة","filter","تجربة المستخدم","تجميع"]
         }
       ]
     }
   ]
 };
 
-/* =========================================================
+/* ==============================================
    STATE
-========================================================= */
-let currentStudent = null;
+============================================== */
+let studentName = null;
 let answers = {};
+let questionStartTimes = {};  // qid -> timestamp when student first focused
+let telegramMsgId = null;     // ID of the live-tracking message we keep editing
+let lastEditText = "";        // avoid redundant edits with same content
+let editQueue = Promise.resolve(); // serialize edits to avoid Telegram 429
+let examStartTime = null;
 
-function flattenQuestions(){
-  let list = [];
-  EXAM.sections.forEach((sec, sIdx) => {
-    sec.questions.forEach((q, qIdx) => {
-      list.push({sec, secIdx:sIdx, q, qIdx});
-    });
+/* ==============================================
+   FLATTEN QUESTIONS
+============================================== */
+function flattenQ() {
+  const list = [];
+  EXAM.sections.forEach(sec => {
+    sec.questions.forEach(q => list.push({ sec, q }));
   });
   return list;
 }
-const ALL_Q = flattenQuestions();
-const TOTAL_POINTS = EXAM.sections.reduce((s,sec)=>s+sec.points,0);
+const ALL_Q = flattenQ();
+const TOTAL_POINTS = EXAM.sections.reduce((s, sec) => s + sec.points, 0);
 
-/* =========================================================
-   STORAGE HELPERS (draft-only — autosave while solving, in case of accidental refresh)
-========================================================= */
-function saveDraft(){
-  if(!currentStudent) return;
-  try{
-    localStorage.setItem(STORAGE_KEY_PREFIX+"draft_"+currentStudent, JSON.stringify(answers));
-  }catch(e){ /* storage unavailable — ignore, Telegram is the source of truth */ }
-}
-function loadDraft(name){
-  try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY_PREFIX+"draft_"+name) || "{}");
-  }catch(e){ return {}; }
-}
-function clearDraft(name){
-  try{ localStorage.removeItem(STORAGE_KEY_PREFIX+"draft_"+name); }catch(e){}
-}
-
-/* =========================================================
-   SCREEN SWITCHING
-========================================================= */
-function show(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+/* ==============================================
+   UTILS
+============================================== */
+function show(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
-
-/* =========================================================
-   STUDENT FLOW
-========================================================= */
-function startExam(){
-  const input = document.getElementById("studentNameInput");
-  const name = input.value.trim();
-  const err = document.getElementById("nameErr");
-  if(!name){
-    err.style.display = "block";
-    return;
-  }
-  err.style.display = "none";
-  currentStudent = name;
-  answers = loadDraft(name);
-  document.getElementById("examStudentName").textContent = name;
-  renderExam();
-  show("screen-exam");
+function esc(str) {
+  return (str || "").toString()
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function md(str) {
+  return (str || "").toString().replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
+}
+function now() { return new Date().toLocaleTimeString('ar-EG'); }
+function elapsed(startTs) {
+  if (!startTs) return "—";
+  const sec = Math.round((Date.now() - startTs) / 1000);
+  if (sec < 60) return `${sec}ث`;
+  return `${Math.floor(sec/60)}د ${sec%60}ث`;
+}
+function saveDraft() {
+  try { localStorage.setItem("sec2_exam2_draft_" + studentName, JSON.stringify(answers)); } catch(e) {}
+}
+function loadDraft(name) {
+  try { return JSON.parse(localStorage.getItem("sec2_exam2_draft_" + name) || "{}"); } catch(e) { return {}; }
+}
+function clearDraft() {
+  try { localStorage.removeItem("sec2_exam2_draft_" + studentName); } catch(e) {}
 }
 
-function escapeHtml(str){
-  if(typeof str !== "string") return str;
-  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
+/* ==============================================
+   GRADING ENGINE
+============================================== */
+function grade(studentAnswers) {
+  let total = 0;
+  const results = ALL_Q.map(({ sec, q }) => {
+    const raw = studentAnswers[q.id];
+    let item = { id: q.id, text: q.text, max: q.points, earned: 0, status: "bad", answer: "(لم يُجب)" };
 
-function renderExam(){
-  const container = document.getElementById("examContent");
-  let html = "";
-
-  EXAM.sections.forEach(sec => {
-    html += `<div class="section-comment"><span>${escapeHtml(sec.title)}</span></div>`;
-    html += `<div class="section-points">${sec.points} درجة</div>`;
-
-    if(sec.intro_code){
-      html += `<div class="code-block">${escapeHtml(sec.intro_code)}</div>`;
-    }
-    if(sec.tableInfo){
-      html += renderTableInfo(sec.tableInfo);
-    }
-
-    sec.questions.forEach((q, idx) => {
-      html += `<div class="q-card">`;
-      html += `<div class="q-gutter">${idx+1}</div>`;
-      html += `<div class="q-text">${escapeHtml(q.text)}<span class="q-points">(${q.points} د)</span></div>`;
-
-      if(sec.type === "mcq"){
-        html += renderMcq(q);
-      } else if(sec.type === "truefalse"){
-        html += renderTrueFalse(q);
-      } else if(q.type === "compare-table"){
-        html += renderCompareTable(q);
-      } else if(q.type === "code"){
-        html += renderCodeAnswer(q);
+    if (q.type === "matching") {
+      const sel = raw || {};
+      const answeredCount = Object.values(sel).filter(v => v && v.trim()).length;
+      if (!answeredCount) {
+        item.status = "bad"; item.earned = 0;
       } else {
-        html += renderTextAnswer(q);
+        const correct = q.pairs.filter((p, i) => sel[i] === p.right).length;
+        item.answer = `${correct} / ${q.pairs.length} صحيحة`;
+        item.earned = Math.round(q.points * (correct / q.pairs.length) * 10) / 10;
+        item.status = correct === q.pairs.length ? "good" : "review";
       }
+      total += item.earned;
+      return item;
+    }
 
-      html += `</div>`;
+    let text = "";
+    if (q.type === "compare-table") {
+      text = Object.values(raw || {}).join(" ").toLowerCase();
+    } else {
+      text = (raw || "").toString().trim().toLowerCase();
+    }
+
+    if (!text) {
+      item.status = "bad"; item.earned = 0;
+    } else {
+      item.answer = q.type === "compare-table" ? "(جدول مُعبأ)" : (raw || "").toString().trim();
+      const hits = q.keywords.filter(k => text.includes(k.toLowerCase())).length;
+      const ratio = q.keywords.length ? hits / q.keywords.length : 0.5;
+      item.earned = Math.round(q.points * Math.min(ratio + 0.2, 1) * 10) / 10;
+      item.status = "review";
+    }
+    total += item.earned;
+    return item;
+  });
+  return { total: Math.round(total * 10) / 10, max: TOTAL_POINTS, results };
+}
+
+/* ==============================================
+   ANSWER SUMMARY FOR TELEGRAM (compact)
+============================================== */
+function answerSummaryLine(q) {
+  const raw = answers[q.id];
+  if (!raw) return "❌ لم يُجب";
+  if (q.type === "matching") {
+    const vals = Object.values(raw).filter(v => v && v.trim());
+    return vals.length ? `✍ (مطابقة: ${vals.length}/${q.pairs.length} مُختارة)` : "❌ لم يُجب";
+  }
+  if (q.type === "compare-table") {
+    const vals = Object.values(raw).filter(v => v && v.trim());
+    return vals.length ? `✍ (جدول: ${vals.length} خلية مُعبأة)` : "❌ لم يُجب";
+  }
+  const txt = (raw || "").toString().trim();
+  if (!txt) return "❌ لم يُجب";
+  return `✍ ${txt.length > 80 ? txt.slice(0, 80) + "…" : txt}`;
+}
+
+/* ==============================================
+   BUILD LIVE TELEGRAM MESSAGE TEXT
+============================================== */
+function buildLiveText(phase) {
+  // phase: "start" | "progress" | "final"
+  const lines = [];
+  const elapsed_total = examStartTime ? elapsed(examStartTime) : "—";
+
+  lines.push(`📡 *تتبع مباشر — ${md(EXAM.title)}*`);
+  lines.push(`👤 الطالب: *${md(studentName)}*`);
+  lines.push(`📅 التاريخ: ${md(EXAM.date)}`);
+
+  if (phase === "start") {
+    lines.push(`🟢 بدأ الامتحان الساعة: ${now()}`);
+    lines.push(`⏳ انتظر إجابات الطالب\\.\\.\\.`);
+    return lines.join("\n");
+  }
+
+  if (phase === "final") {
+    const g = grade(answers);
+    lines.push(`🏁 *تم التسليم* الساعة: ${now()}`);
+    lines.push(`⏱ الوقت الإجمالي: ${elapsed_total}`);
+    lines.push(`📊 الدرجة التلقائية التقريبية: *${g.total} / ${g.max}*`);
+    lines.push(`🟡 = يحتاج مراجعة يدوية`);
+    lines.push(`━━━━━━━━━━━━━━━`);
+
+    let qNum = 0;
+    EXAM.sections.forEach(sec => {
+      lines.push(``);
+      lines.push(`*${md(sec.title)}* \\(${sec.points} د\\)`);
+      sec.questions.forEach(q => {
+        qNum++;
+        const r = g.results.find(x => x.id === q.id);
+        const timeSpent = questionStartTimes[q.id] ? elapsed(questionStartTimes[q.id]) : "—";
+        lines.push(`${qNum}\\. 🟡 *${md(q.text.length > 55 ? q.text.slice(0,55)+"…" : q.text)}*`);
+        lines.push(`   ↳ الإجابة: ${md(r ? r.answer.slice(0,100) : "(لم يُجب)")}`);
+        lines.push(`   ↳ الوقت على السؤال: ${timeSpent} | درجة تقريبية: ${r ? r.earned : 0}/${q.points}`);
+      });
+    });
+    lines.push(``);
+    lines.push(`━━━━━━━━━━━━━━━`);
+    lines.push(`⚠️ راجع جميع الأسئلة يدوياً \\(كل الأسئلة مقالية\\)\\.`);
+    return lines.join("\n");
+  }
+
+  // phase === "progress"
+  lines.push(`⏱ وقت منذ البداية: ${elapsed_total}`);
+  lines.push(`━━━━━━━━━━━━━━━`);
+
+  let qNum = 0;
+  let answered = 0;
+  EXAM.sections.forEach(sec => {
+    lines.push(``);
+    lines.push(`*${md(sec.title)}*`);
+    sec.questions.forEach(q => {
+      qNum++;
+      const hasAnswer = isAnswered(q);
+      if (hasAnswer) answered++;
+      const icon = hasAnswer ? "✅" : (questionStartTimes[q.id] ? "✍" : "⬜");
+      const timeLabel = questionStartTimes[q.id] ? ` \\[${elapsed(questionStartTimes[q.id])}\\]` : "";
+      const ansLine = answerSummaryLine(q);
+      lines.push(`${icon} *${qNum}\\.* ${md(q.text.length > 50 ? q.text.slice(0,50)+"…" : q.text)}${timeLabel}`);
+      if (hasAnswer || questionStartTimes[q.id]) {
+        lines.push(`   ${md(ansLine)}`);
+      }
     });
   });
 
+  lines.push(``);
+  lines.push(`━━━━━━━━━━━━━━━`);
+  lines.push(`📊 ${answered} / ${ALL_Q.length} سؤال أُجيب عليه`);
+  return lines.join("\n");
+}
+
+/* ==============================================
+   TELEGRAM API CALLS
+============================================== */
+const TG_BASE = () => `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+const CONFIGURED = () => TELEGRAM_BOT_TOKEN && !TELEGRAM_BOT_TOKEN.includes("PUT_YOUR");
+
+async function tgSend(text) {
+  if (!CONFIGURED()) return null;
+  try {
+    const r = await fetch(`${TG_BASE()}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: "MarkdownV2", disable_notification: false })
+    });
+    const data = await r.json();
+    return data.ok ? data.result.message_id : null;
+  } catch(e) { console.error("tgSend", e); return null; }
+}
+
+async function tgEdit(text) {
+  if (!CONFIGURED() || !telegramMsgId) return;
+  if (text === lastEditText) return; // no change
+  lastEditText = text;
+  try {
+    await fetch(`${TG_BASE()}/editMessageText`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, message_id: telegramMsgId, text, parse_mode: "MarkdownV2" })
+    });
+  } catch(e) { console.error("tgEdit", e); }
+}
+
+// Queue edits with 1.5s debounce to respect Telegram rate limit (max 1 edit/sec per message)
+let editDebounceTimer = null;
+function scheduleEdit(phase) {
+  if (editDebounceTimer) clearTimeout(editDebounceTimer);
+  editDebounceTimer = setTimeout(() => {
+    editQueue = editQueue.then(async () => {
+      const text = buildLiveText(phase);
+      await tgEdit(text);
+    });
+  }, 1500);
+}
+
+/* ==============================================
+   EXAM FLOW
+============================================== */
+async function startExam() {
+  const input = document.getElementById("studentNameInput");
+  const name = input.value.trim();
+  const err = document.getElementById("nameErr");
+  if (!name) { err.style.display = "block"; return; }
+  err.style.display = "none";
+
+  studentName = name;
+  examStartTime = Date.now();
+  answers = loadDraft(name);
+  document.getElementById("examStudentName").textContent = name;
+
+  renderExam();
+  show("screen-exam");
+
+  // Send first Telegram message and store its ID
+  telegramMsgId = await tgSend(buildLiveText("start"));
+  // Immediately update to show question list
+  setTimeout(() => scheduleEdit("progress"), 2000);
+}
+
+function renderExam() {
+  const container = document.getElementById("examContent");
+  let html = "";
+  EXAM.sections.forEach(sec => {
+    html += `<div class="section-comment"><span>${esc(sec.title)}</span></div>`;
+    html += `<div class="section-points">${sec.points} درجة</div>`;
+    if (sec.introCode) {
+      html += `<div class="code-block">${esc(sec.introCode)}</div>`;
+    }
+    sec.questions.forEach((q, idx) => {
+      html += renderQCard(q, idx);
+    });
+  });
   container.innerHTML = html;
   attachListeners();
   updateProgress();
 }
 
-function renderMcq(q){
-  let html = `<div class="opts" data-qid="${q.id}">`;
-  q.options.forEach(opt => {
-    const selected = answers[q.id] === opt.key ? "selected" : "";
-    html += `
-      <label class="opt ${selected}" data-key="${opt.key}">
-        <input type="radio" name="${q.id}" value="${opt.key}" ${answers[q.id]===opt.key?"checked":""}>
-        <span class="opt-letter">(${opt.key})</span>
-        <span>${escapeHtml(opt.text)}</span>
-      </label>`;
-  });
-  html += `</div>`;
-  return html;
+function renderQCard(q, idx) {
+  const hasAns = isAnswered(q);
+  return `<div class="q-card ${hasAns ? 'answered' : ''}" id="card_${q.id}">
+    <div class="q-gutter">${idx + 1}</div>
+    <div class="q-text">${esc(q.text)}<span class="q-points">(${q.points} د)</span></div>
+    ${renderInput(q)}
+  </div>`;
 }
 
-function renderTrueFalse(q){
-  const ans = answers[q.id] || {};
-  const tfVal = ans.tf;
-  let html = `
-    <div class="tf-row" data-qid="${q.id}">
-      <button class="tf-btn true ${tfVal===true?'selected true':''}" data-val="true">✓ صح</button>
-      <button class="tf-btn false ${tfVal===false?'selected false':''}" data-val="false">✗ خطأ</button>
-    </div>
-    <label class="correction-label">التصحيح (إن كانت العبارة خطأ):</label>
-    <textarea class="correction-input" data-qid="${q.id}" placeholder="اكتب التصحيح هنا...">${escapeHtml(ans.correction || "")}</textarea>
-  `;
-  return html;
+function renderInput(q) {
+  if (q.type === "compare-table") return renderCompareTable(q);
+  if (q.type === "matching") return renderMatching(q);
+  const isCode = q.type === "code";
+  const val = esc(answers[q.id] || "");
+  const cls = isCode ? "answer-box code" : "answer-box";
+  const dir = isCode ? 'dir="ltr" style="text-align:left"' : '';
+  const ph = esc(q.placeholder || "اكتب إجابتك هنا...");
+  return `<span class="type-label">${isCode ? "// SQL" : "إجابتك:"}</span>
+    <textarea class="answer-box ${isCode ? 'code' : ''}" ${dir} data-qid="${q.id}" placeholder="${ph}">${val}</textarea>`;
 }
 
-function renderTextAnswer(q){
-  const val = answers[q.id] || "";
-  return `<textarea class="answer-box" data-qid="${q.id}" placeholder="اكتب إجابتك هنا...">${escapeHtml(val)}</textarea>`;
-}
-
-function renderCodeAnswer(q){
-  const val = answers[q.id] || "";
-  return `<textarea class="answer-box code" data-qid="${q.id}" placeholder="-- اكتب استعلام SQL هنا">${escapeHtml(val)}</textarea>`;
-}
-
-function renderCompareTable(q){
+function renderCompareTable(q) {
   const val = answers[q.id] || {};
-  let html = `<table class="compare-table"><thead><tr><th>وجه المقارنة</th>`;
-  q.cols.forEach(c => html += `<th>${escapeHtml(c)}</th>`);
+  let html = `<table class="compare-table"><thead><tr><th>نوع العلاقة</th>`;
+  q.cols.forEach(c => html += `<th>${esc(c)}</th>`);
   html += `</tr></thead><tbody>`;
   q.rows.forEach((row, rIdx) => {
-    html += `<tr><th>${escapeHtml(row)}</th>`;
+    html += `<tr><th style="white-space:nowrap;font-size:13px;">${esc(row)}</th>`;
     q.cols.forEach((col, cIdx) => {
-      const cellKey = `${rIdx}_${cIdx}`;
-      const cellVal = val[cellKey] || "";
-      html += `<td><input type="text" data-qid="${q.id}" data-cell="${cellKey}" value="${escapeHtml(cellVal)}"></td>`;
+      const key = `${rIdx}_${cIdx}`;
+      html += `<td><textarea class="compare-cell" data-qid="${q.id}" data-cell="${key}" placeholder="...">${esc(val[key] || "")}</textarea></td>`;
     });
     html += `</tr>`;
   });
@@ -715,306 +757,154 @@ function renderCompareTable(q){
   return html;
 }
 
-function renderTableInfo(info){
-  let html = `<div style="font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-bottom:6px;">جدول ${escapeHtml(info.name)}:</div>`;
-  html += `<table class="sql-table-mini"><thead><tr><th>Field</th><th>Type</th><th>Index</th></tr></thead><tbody>`;
-  info.fields.forEach(f => {
-    html += `<tr><td>${escapeHtml(f.field)}</td><td>${escapeHtml(f.type)}</td><td>${escapeHtml(f.index)}</td></tr>`;
+function shuffledRights(q) {
+  // deterministic shuffle so options don't reorder on re-render
+  const rights = q.pairs.map(p => p.right);
+  const out = rights.slice();
+  let seed = 0;
+  for (const ch of q.id) seed += ch.charCodeAt(0);
+  for (let i = out.length - 1; i > 0; i--) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const j = Math.floor((seed / 233280) * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function renderMatching(q) {
+  const val = answers[q.id] || {};
+  const rightOptions = shuffledRights(q);
+  let html = `<div class="opts">`;
+  q.pairs.forEach((p, idx) => {
+    const selected = esc(val[idx] || "");
+    html += `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;">
+      <span class="opt-letter" style="min-width:auto;font-weight:700;color:var(--ink);">${esc(p.left)}</span>
+      <span style="color:var(--gold);">→</span>
+      <select class="match-select" data-qid="${q.id}" data-idx="${idx}" style="flex:1;min-width:180px;padding:8px 10px;border-radius:6px;border:1.5px solid var(--line);font-family:var(--sans);font-size:14px;">
+        <option value="">— اختر الإجابة —</option>
+        ${rightOptions.map(r => `<option value="${esc(r)}" ${esc(r) === selected ? "selected" : ""}>${esc(r)}</option>`).join("")}
+      </select>
+    </div>`;
   });
-  html += `</tbody></table>`;
+  html += `</div>`;
   return html;
 }
 
-function attachListeners(){
-  // MCQ
-  document.querySelectorAll(".opts").forEach(group => {
-    const qid = group.dataset.qid;
-    group.querySelectorAll(".opt").forEach(opt => {
-      opt.addEventListener("click", () => {
-        answers[qid] = opt.dataset.key;
-        group.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected"));
-        opt.classList.add("selected");
-        opt.querySelector("input").checked = true;
-        saveDraft();
-        updateProgress();
-      });
-    });
-  });
-
-  // True/False
-  document.querySelectorAll(".tf-row").forEach(row => {
-    const qid = row.dataset.qid;
-    row.querySelectorAll(".tf-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const val = btn.dataset.val === "true";
-        if(!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
-        answers[qid].tf = val;
-        row.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("selected","true","false"));
-        btn.classList.add("selected", btn.dataset.val === "true" ? "true" : "false");
-        saveDraft();
-        updateProgress();
-      });
-    });
-  });
-
-  // Correction textareas
-  document.querySelectorAll(".correction-input").forEach(ta => {
-    ta.addEventListener("input", () => {
-      const qid = ta.dataset.qid;
-      if(!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
-      answers[qid].correction = ta.value;
-      saveDraft();
-    });
-  });
-
-  // Text / code answers
-  document.querySelectorAll(".answer-box").forEach(ta => {
+/* ==============================================
+   EVENT LISTENERS + TRACKING
+============================================== */
+function attachListeners() {
+  // Text & code textareas
+  document.querySelectorAll("textarea.answer-box").forEach(ta => {
+    ta.addEventListener("focus", () => trackFocus(ta.dataset.qid));
     ta.addEventListener("input", () => {
       answers[ta.dataset.qid] = ta.value;
+      markAnswered(ta.dataset.qid);
       saveDraft();
       updateProgress();
+      scheduleEdit("progress");
+    });
+  });
+
+  // Matching selects
+  document.querySelectorAll("select.match-select").forEach(sel => {
+    sel.addEventListener("focus", () => trackFocus(sel.dataset.qid));
+    sel.addEventListener("change", () => {
+      const qid = sel.dataset.qid;
+      if (!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
+      answers[qid][sel.dataset.idx] = sel.value;
+      markAnswered(qid);
+      saveDraft();
+      updateProgress();
+      scheduleEdit("progress");
     });
   });
 
   // Compare table cells
-  document.querySelectorAll(".compare-table input").forEach(inp => {
-    inp.addEventListener("input", () => {
-      const qid = inp.dataset.qid;
-      const cell = inp.dataset.cell;
-      if(!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
-      answers[qid][cell] = inp.value;
+  document.querySelectorAll("textarea.compare-cell").forEach(ta => {
+    ta.addEventListener("focus", () => trackFocus(ta.dataset.qid));
+    ta.addEventListener("input", () => {
+      const qid = ta.dataset.qid;
+      if (!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
+      answers[qid][ta.dataset.cell] = ta.value;
+      markAnswered(qid);
       saveDraft();
       updateProgress();
+      scheduleEdit("progress");
     });
   });
 }
 
-function isAnswered(qid){
-  const a = answers[qid];
-  if(a === undefined || a === null) return false;
-  if(typeof a === "string") return a.trim().length > 0;
-  if(typeof a === "object"){
-    return Object.keys(a).some(k => {
-      const v = a[k];
-      if(typeof v === "boolean") return true;
-      if(typeof v === "string") return v.trim().length>0;
-      return !!v;
-    });
+function trackFocus(qid) {
+  if (!questionStartTimes[qid]) {
+    questionStartTimes[qid] = Date.now();
+    // Mark card as active
+    document.querySelectorAll(".q-card").forEach(c => c.classList.remove("active"));
+    const card = document.getElementById("card_" + qid);
+    if (card) card.classList.add("active");
+    scheduleEdit("progress"); // send update when student opens a new question
   }
-  return false;
 }
 
-function updateProgress(){
+function markAnswered(qid) {
+  const card = document.getElementById("card_" + qid);
+  if (card) card.classList.add("answered");
+}
+
+function isAnswered(q) {
+  const raw = answers[q.id];
+  if (!raw) return false;
+  if (q.type === "compare-table" || q.type === "matching") return Object.values(raw).some(v => v && v.trim());
+  return typeof raw === "string" && raw.trim().length > 0;
+}
+
+function updateProgress() {
+  const done = ALL_Q.filter(({ q }) => isAnswered(q)).length;
   const total = ALL_Q.length;
-  const done = ALL_Q.filter(item => isAnswered(item.q.id)).length;
   document.getElementById("progressLabel").textContent = `${done} / ${total}`;
-  document.getElementById("progressFill").style.width = `${(done/total)*100}%`;
+  document.getElementById("progressFill").style.width = `${(done / total) * 100}%`;
 }
 
-/* =========================================================
-   GRADING ENGINE
-========================================================= */
-function gradeSubmission(studentAnswers){
-  let totalScore = 0;
-  let results = [];
-
-  EXAM.sections.forEach(sec => {
-    sec.questions.forEach(q => {
-      let item = {
-        id: q.id, text: q.text, maxPoints: q.points,
-        studentAnswer: studentAnswers[q.id], status: "review", earnedPoints: 0
-      };
-
-      if(sec.type === "mcq"){
-        const ans = studentAnswers[q.id];
-        if(ans === q.correct){
-          item.earnedPoints = q.points; item.status = "ok";
-        } else if(ans){
-          item.earnedPoints = 0; item.status = "bad";
-        } else {
-          item.earnedPoints = 0; item.status = "bad"; item.studentAnswer = "(لم يُجب)";
-        }
-        item.correctAnswer = q.correct;
-      }
-      else if(sec.type === "truefalse"){
-        const ans = studentAnswers[q.id] || {};
-        const tfCorrect = ans.tf === q.correct;
-        let half = q.points / 2;
-        let earned = 0;
-        if(tfCorrect){
-          earned += half;
-          if(q.correct === false){
-            // needs correction text — check keywords loosely
-            const corr = (ans.correction || "").toLowerCase();
-            const hasKeyword = q.keywords.some(k => corr.includes(k.toLowerCase()));
-            if(hasKeyword || corr.trim().length > 8){
-              earned += half;
-              item.status = "ok";
-            } else {
-              item.status = "review";
-            }
-          } else {
-            earned += half;
-            item.status = "ok";
-          }
-        } else {
-          item.status = "bad";
-        }
-        item.earnedPoints = Math.round(earned*10)/10;
-        item.studentAnswer = (ans.tf===true?"صح":ans.tf===false?"خطأ":"(لم يُجب)") + (ans.correction ? " — تصحيح: "+ans.correction : "");
-        item.correctAnswer = q.correct ? "صح" : "خطأ";
-      }
-      else if(q.type === "compare-table"){
-        const ans = studentAnswers[q.id] || {};
-        const allText = Object.values(ans).join(" ").trim().toLowerCase();
-        if(!allText){
-          item.earnedPoints = 0; item.status = "bad"; item.studentAnswer = "(لم يُجب)";
-        } else {
-          const matches = q.keywords.filter(k => allText.includes(k.toLowerCase())).length;
-          const ratio = q.keywords.length ? matches / q.keywords.length : 0;
-          item.earnedPoints = Math.round(q.points * Math.min(ratio + 0.15, 1) * 10)/10;
-          item.status = "review";
-          item.studentAnswer = "(جدول مُعبأ — راجع التفاصيل)";
-        }
-      }
-      else { // text or code
-        const rawAns = studentAnswers[q.id];
-        const ans = (rawAns || "").toString().trim().toLowerCase();
-        if(!ans){
-          item.earnedPoints = 0; item.status = "bad"; item.studentAnswer = "(لم يُجب)";
-        } else {
-          const matches = q.keywords.filter(k => ans.includes(k.toLowerCase())).length;
-          const ratio = q.keywords.length ? matches / q.keywords.length : 0.5;
-          item.earnedPoints = Math.round(q.points * Math.min(ratio + 0.2, 1) * 10)/10;
-          item.status = "review"; // always flagged for teacher review per requirements
-        }
-      }
-
-      totalScore += item.earnedPoints;
-      results.push(item);
-    });
-  });
-
-  return { totalScore: Math.round(totalScore*10)/10, maxScore: TOTAL_POINTS, results };
-}
-
-/* =========================================================
-   SUBMIT FLOW
-========================================================= */
-function confirmSubmit(){
+/* ==============================================
+   SUBMIT
+============================================== */
+function confirmSubmit() {
+  const done = ALL_Q.filter(({ q }) => isAnswered(q)).length;
   const total = ALL_Q.length;
-  const done = ALL_Q.filter(item => isAnswered(item.q.id)).length;
   let msg = "هل أنتِ متأكدة من تسليم الامتحان؟ لا يمكن التعديل بعد التسليم.";
-  if(done < total){
-    msg = `لم تُجيبي على ${total-done} سؤال/أسئلة بعد. ${msg}`;
-  }
-  if(confirm(msg)){
-    submitExam();
-  }
+  if (done < total) msg = `لم تُجيبي على ${total - done} سؤال بعد.\n` + msg;
+  if (confirm(msg)) submitExam();
 }
 
-async function submitExam(){
-  const graded = gradeSubmission(answers);
-  const submission = {
-    student: currentStudent,
-    timestamp: new Date().toISOString(),
-    answers: JSON.parse(JSON.stringify(answers)),
-    autoGrade: graded
-  };
-
-  clearDraft(currentStudent);
-
-  document.getElementById("doneName").textContent = currentStudent;
+async function submitExam() {
+  clearDraft();
+  document.getElementById("doneName").textContent = studentName;
   show("screen-done");
 
   const statusEl = document.getElementById("doneStatus");
-  const sent = await sendToTelegram(submission);
-  statusEl.textContent = sent
-    ? "تم إرسال الإجابات والنتيجة للمعلم بنجاح ✓"
-    : "تنبيه: تعذّر إرسال النتيجة لتيليجرام. يرجى إخبار المعلم.";
-}
+  const finalText = buildLiveText("final");
 
-/* =========================================================
-   TELEGRAM INTEGRATION
-========================================================= */
-function statusEmoji(status){
-  if(status === "ok") return "✅";
-  if(status === "bad") return "❌";
-  return "🟡"; // review
-}
-
-function buildTelegramMessages(sub){
-  const g = sub.autoGrade;
-  const header = [
-    `📝 *امتحان مراجعة SEC2*`,
-    `👤 الطالب: *${escapeMd(sub.student)}*`,
-    `🕐 الوقت: ${escapeMd(new Date(sub.timestamp).toLocaleString('ar-EG'))}`,
-    `📊 الدرجة التلقائية التقريبية: *${g.totalScore} / ${g.maxScore}*`,
-    ``,
-    `🟡 = يحتاج مراجعتك اليدوية   ✅ = صحيحة تلقائياً   ❌ = خاطئة`,
-    `━━━━━━━━━━━━━━━`
-  ].join("\n");
-
-  // Build one block per question
-  const blocks = g.results.map((r, idx) => {
-    let lines = [];
-    lines.push(`${statusEmoji(r.status)} *${idx+1}. ${escapeMd(r.text)}* (${r.maxPoints} د — حصل على ${r.earnedPoints})`);
-    lines.push(`↳ إجابة الطالب: ${escapeMd(String(r.studentAnswer))}`);
-    if(r.correctAnswer !== undefined){
-      lines.push(`↳ الإجابة الصحيحة: ${escapeMd(String(r.correctAnswer))}`);
-    }
-    return lines.join("\n");
+  // Clear debounce then do final edit
+  if (editDebounceTimer) clearTimeout(editDebounceTimer);
+  editQueue = editQueue.then(async () => {
+    await tgEdit(finalText);
   });
 
-  // Pack blocks into messages under Telegram's ~4096 char limit (use 3500 to be safe)
-  const LIMIT = 3500;
-  let messages = [];
-  let current = header;
-  blocks.forEach(block => {
-    if((current + "\n\n" + block).length > LIMIT){
-      messages.push(current);
-      current = block;
-    } else {
-      current += "\n\n" + block;
-    }
-  });
-  messages.push(current);
+  await editQueue;
 
-  // Footer reminder on the last message
-  messages[messages.length-1] += `\n\n━━━━━━━━━━━━━━━\n⚠️ راجع الأسئلة 🟡 يدوياً (الدرجة أعلاه تقريبية لهذه الأسئلة).`;
-
-  return messages;
-}
-
-function escapeMd(str){
-  return (str||"").toString().replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
-}
-
-async function sendToTelegram(sub){
-  if(!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.includes("PUT_YOUR")) return false;
-  try{
-    const messages = buildTelegramMessages(sub);
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    for(const text of messages){
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: "Markdown" })
-      });
-      if(!res.ok) return false;
-    }
-    return true;
-  }catch(e){
-    console.error("Telegram send failed", e);
-    return false;
+  if (!CONFIGURED()) {
+    statusEl.textContent = "تنبيه: لم يتم إعداد توكن تيليجرام بعد. الإجابات محفوظة مؤقتاً.";
+  } else {
+    statusEl.textContent = "تم إرسال التسليم النهائي للمعلم بنجاح ✓";
   }
 }
 
-/* =========================================================
+/* ==============================================
    INIT
-========================================================= */
+============================================== */
 document.addEventListener("DOMContentLoaded", () => {
-  // nothing extra needed; default screen is login
+  // Pre-fill student name if it was شهد
+  // (no auto-fill — student types their own name)
 });
 </script>
 </body>
