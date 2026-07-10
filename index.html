@@ -3,909 +3,830 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEC2 — امتحان النموذج الثاني</title>
+<title>SEC2 — امتحان المراجعة الشامل</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#1B2430; --ink-soft:#283449; --paper:#F7F4EC; --paper-soft:#EFEADC;
-    --teal:#2E7D6B; --teal-soft:#E3EFE9; --rust:#C8553D; --rust-soft:#F6E6E1;
-    --gold:#A88B5C; --line:#D8D2C0; --text:#1B2430; --text-dim:#5B6472;
-    --radius:10px; --mono:'JetBrains Mono',monospace; --sans:'Cairo',sans-serif;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{font-family:var(--sans);background:var(--paper);color:var(--text);min-height:100vh;line-height:1.6;}
-  @media(prefers-reduced-motion:reduce){*{animation-duration:0.001ms!important;transition-duration:0.001ms!important;}}
-  .hidden{display:none!important;}
-  .screen{min-height:100vh;display:flex;flex-direction:column;}
-  .wrap{max-width:880px;margin:0 auto;padding:0 20px;width:100%;}
-  button{font-family:var(--sans);cursor:pointer;border:none;}
-  input,textarea,select{font-family:var(--sans);}
+:root{
+  --ink:#1B2430;--ink-soft:#283449;--paper:#F7F4EC;--paper-soft:#EFEADC;
+  --teal:#2E7D6B;--teal-soft:#E3EFE9;--rust:#C8553D;--rust-soft:#F6E6E1;
+  --gold:#A88B5C;--gold-soft:#F5EFE2;--line:#D8D2C0;--text:#1B2430;--text-dim:#5B6472;
+  --radius:10px;--mono:'JetBrains Mono',monospace;--sans:'Cairo',sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--paper);color:var(--text);min-height:100vh;line-height:1.6;}
+.hidden{display:none!important;}
+.screen{min-height:100vh;display:flex;flex-direction:column;}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px;width:100%;}
+button{font-family:var(--sans);cursor:pointer;border:none;}
+input,textarea,select{font-family:var(--sans);}
 
-  /* topbar */
-  .topbar{background:var(--ink);color:#fff;padding:14px 0;border-bottom:3px solid var(--gold);}
-  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:14px;}
-  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(46,125,107,0.25);}
-  .brand b{font-family:var(--sans);font-weight:800;font-size:16px;}
-  .session-pill{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:5px 12px;border-radius:20px;color:#D9D2BE;}
+/* ── TOPBAR ── */
+.topbar{background:var(--ink);color:#fff;padding:14px 0;border-bottom:3px solid var(--gold);}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(46,125,107,0.25);}
+.brand b{font-family:var(--sans);font-weight:800;font-size:16px;color:#fff;}
+.session-pill{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);padding:5px 12px;border-radius:20px;color:#D9D2BE;}
 
-  /* boot */
-  .boot{flex:1;display:flex;align-items:center;justify-content:center;background:var(--ink);color:#fff;padding:60px 20px;
-    background-image:radial-gradient(circle at 15% 20%,rgba(46,125,107,0.18),transparent 45%),radial-gradient(circle at 85% 80%,rgba(168,139,92,0.14),transparent 45%);}
-  .boot-card{width:100%;max-width:520px;background:var(--ink-soft);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:36px 32px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);}
-  .boot-head{font-family:var(--mono);color:var(--teal);font-size:13px;margin-bottom:6px;display:flex;gap:8px;align-items:center;}
-  .blink{animation:blink 1.1s steps(1) infinite;}
-  @keyframes blink{50%{opacity:0;}}
-  .boot-title{font-size:26px;font-weight:800;margin:6px 0 4px;}
-  .boot-sub{color:#AEB6C3;font-size:14px;margin-bottom:28px;}
-  .field{margin-bottom:18px;}
-  .field label{display:block;font-size:13px;color:#C7CCD6;margin-bottom:7px;font-family:var(--mono);}
-  .field input{width:100%;padding:13px 14px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:15px;outline:none;transition:border-color .15s;}
-  .field input:focus{border-color:var(--teal);}
-  .field input::placeholder{color:#5B6472;}
-  .err-text{color:#ff8b78;font-size:13px;margin-top:6px;font-family:var(--mono);display:none;}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:8px;font-weight:700;font-size:15px;transition:transform .12s,opacity .15s;}
-  .btn:active{transform:scale(0.98);}
-  .btn-primary{background:var(--teal);color:#fff;width:100%;}
-  .btn-primary:hover{opacity:0.92;}
-  .btn-ghost{background:transparent;color:var(--text-dim);border:1.5px solid var(--line);}
-  .btn-rust{background:var(--rust);color:#fff;}
+/* ── BOOT SCREEN ── */
+.boot{flex:1;display:flex;align-items:center;justify-content:center;background:var(--ink);color:#fff;padding:60px 20px;
+  background-image:radial-gradient(circle at 15% 20%,rgba(46,125,107,0.18),transparent 45%),radial-gradient(circle at 85% 80%,rgba(168,139,92,0.14),transparent 45%);}
+.boot-card{width:100%;max-width:520px;background:var(--ink-soft);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:36px 32px;box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);}
+.boot-head{font-family:var(--mono);color:var(--teal);font-size:13px;margin-bottom:6px;display:flex;gap:8px;}
+.blink{animation:blink 1.1s steps(1) infinite;}
+@keyframes blink{50%{opacity:0;}}
+.boot-title{font-size:24px;font-weight:800;margin:6px 0 4px;}
+.boot-sub{color:#AEB6C3;font-size:14px;margin-bottom:6px;}
+.boot-warn{background:rgba(200,85,61,0.18);border:1px solid rgba(200,85,61,0.4);border-radius:8px;padding:10px 14px;font-size:13px;color:#ffb3a3;margin-bottom:24px;font-family:var(--mono);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:13px;color:#C7CCD6;margin-bottom:7px;font-family:var(--mono);}
+.field input{width:100%;padding:13px 14px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:15px;outline:none;transition:border-color .15s;}
+.field input:focus{border-color:var(--teal);}
+.field input::placeholder{color:#5B6472;}
+.err-text{color:#ff8b78;font-size:13px;margin-top:6px;font-family:var(--mono);display:none;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:8px;font-weight:700;font-size:15px;transition:transform .12s,opacity .15s;}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--teal);color:#fff;width:100%;}
+.btn-primary:hover{opacity:0.9;}
+.btn-rust{background:var(--rust);color:#fff;}
 
-  /* live tracker badge */
-  .tracker-badge{
-    display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;
-    padding:4px 10px;border-radius:20px;background:rgba(168,139,92,0.15);border:1px solid rgba(168,139,92,0.35);color:var(--gold);
-  }
-  .tracker-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease-in-out infinite;}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
+/* ── EXAM HEADER ── */
+.exam-header{background:var(--ink);color:#fff;padding:14px 0;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--teal);}
+.exam-header .wrap{display:flex;flex-direction:column;gap:10px;}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.student-tag{font-family:var(--mono);font-size:13px;color:#D9D2BE;}
+.student-tag b{color:#fff;}
 
-  /* exam header */
-  .exam-header{background:var(--ink);color:#fff;padding:18px 0;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--teal);}
-  .exam-header .wrap{display:flex;flex-direction:column;gap:10px;}
-  .exam-header-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
-  .student-tag{font-family:var(--mono);font-size:13px;color:#D9D2BE;}
-  .student-tag b{color:#fff;}
-  .progress-track{height:8px;border-radius:6px;background:rgba(255,255,255,0.1);overflow:hidden;width:100%;}
-  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),#57b39a);width:0%;transition:width .35s ease;border-radius:6px;}
-  .progress-label{font-family:var(--mono);font-size:12px;color:var(--gold);white-space:nowrap;}
+/* ── TIMER ── */
+.timer-wrap{display:flex;align-items:center;gap:8px;}
+.timer-box{
+  font-family:var(--mono);font-weight:700;font-size:22px;letter-spacing:2px;
+  background:var(--ink-soft);border:1.5px solid rgba(255,255,255,0.15);
+  padding:6px 16px;border-radius:8px;color:#fff;min-width:88px;text-align:center;
+  transition:background .3s,color .3s,border-color .3s;
+}
+.timer-box.warn{background:rgba(168,139,92,0.25);border-color:var(--gold);color:var(--gold);}
+.timer-box.danger{background:rgba(200,85,61,0.3);border-color:var(--rust);color:#ff8b78;animation:timerPulse .7s ease-in-out infinite;}
+@keyframes timerPulse{0%,100%{opacity:1;}50%{opacity:0.6;}}
+.timer-label{font-family:var(--mono);font-size:11px;color:#7A8392;}
 
-  /* exam body */
-  .exam-body{padding:34px 0 100px;}
-  .section-comment{font-family:var(--mono);font-size:13px;color:var(--teal);margin:38px 0 16px;display:flex;align-items:center;gap:10px;}
-  .section-comment::before{content:"//";color:var(--gold);}
-  .section-comment span{height:1px;flex:1;background:var(--line);}
-  .section-points{font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:18px;}
+/* ── PROGRESS ── */
+.progress-row{display:flex;align-items:center;gap:10px;}
+.progress-track{height:7px;border-radius:6px;background:rgba(255,255,255,0.1);overflow:hidden;flex:1;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),#57b39a);width:0%;transition:width .3s ease;border-radius:6px;}
+.progress-label{font-family:var(--mono);font-size:12px;color:var(--gold);white-space:nowrap;}
 
-  .q-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 22px 20px;margin-bottom:18px;position:relative;transition:border-color .2s,box-shadow .2s;}
-  .q-card.active{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,125,107,0.1);}
-  .q-card.answered{border-right:4px solid var(--teal);}
-  .q-gutter{font-family:var(--mono);font-size:12px;color:#fff;background:var(--ink-soft);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;position:absolute;top:-14px;right:-10px;font-weight:700;box-shadow:0 4px 10px rgba(27,36,48,0.25);}
-  .q-text{font-size:16px;font-weight:600;margin:6px 0 16px;padding-right:6px;line-height:1.7;}
-  .q-points{font-family:var(--mono);font-size:11px;color:var(--gold);margin-right:8px;}
-  .q-time{font-family:var(--mono);font-size:11px;color:var(--text-dim);float:left;}
+/* ── LIVE BADGE ── */
+.live-badge{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(168,139,92,0.15);border:1px solid rgba(168,139,92,0.35);color:var(--gold);}
+.live-badge .pulse{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
 
-  /* options */
-  .opts{display:flex;flex-direction:column;gap:10px;}
-  .opt{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);cursor:pointer;transition:border-color .15s,background .15s;}
-  .opt:hover{border-color:var(--teal);background:var(--teal-soft);}
-  .opt.selected{border-color:var(--teal);background:var(--teal-soft);font-weight:700;}
-  .opt input{accent-color:var(--teal);margin-top:3px;}
-  .opt-letter{font-family:var(--mono);color:var(--gold);font-weight:700;min-width:18px;}
+/* ── EXAM BODY ── */
+.exam-body{padding:30px 0 100px;}
+.section-header{margin:36px 0 14px;display:flex;align-items:center;gap:10px;}
+.section-header::before{content:"//";font-family:var(--mono);color:var(--gold);font-size:13px;}
+.section-title{font-family:var(--mono);font-size:13px;color:var(--teal);}
+.section-header span.line{height:1px;flex:1;background:var(--line);}
+.section-pts{font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:18px;}
 
-  /* text/code answers */
-  textarea.answer-box{width:100%;min-height:90px;padding:13px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:14.5px;resize:vertical;font-family:var(--sans);}
-  textarea.answer-box:focus{outline:none;border-color:var(--teal);}
-  textarea.answer-box.code{font-family:var(--mono);direction:ltr;text-align:left;background:#FAFAF6;}
-  .type-label{font-size:12px;color:var(--text-dim);margin-bottom:7px;display:block;font-family:var(--mono);}
+/* ── QUESTION CARD ── */
+.q-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px 18px;margin-bottom:14px;position:relative;transition:border-color .2s,box-shadow .2s;}
+.q-card.active{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,125,107,0.1);}
+.q-card.answered{border-right:4px solid var(--teal);}
+.q-num{font-family:var(--mono);font-size:11px;color:#fff;background:var(--ink-soft);min-width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:absolute;top:-13px;right:-8px;font-weight:700;box-shadow:0 3px 8px rgba(27,36,48,0.25);padding:0 6px;}
+.q-text{font-size:15.5px;font-weight:600;margin:4px 0 14px;padding-right:4px;line-height:1.7;}
+.q-type-tag{font-family:var(--mono);font-size:10.5px;color:var(--gold);margin-left:8px;background:var(--gold-soft);padding:1px 7px;border-radius:10px;}
+.q-pts{font-family:var(--mono);font-size:11px;color:var(--text-dim);}
 
-  /* compare table */
-  .compare-table{width:100%;border-collapse:collapse;margin-top:6px;}
-  .compare-table th,.compare-table td{border:1px solid var(--line);padding:10px;text-align:right;vertical-align:top;}
-  .compare-table th{background:var(--paper-soft);font-family:var(--mono);font-size:12.5px;font-weight:700;}
-  .compare-table td{padding:6px;}
-  .compare-table td textarea{width:100%;border:none;background:transparent;font-family:var(--sans);font-size:13.5px;padding:4px;outline:none;resize:vertical;min-height:52px;}
+/* ── MCQ ── */
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--line);cursor:pointer;transition:border-color .15s,background .15s;font-size:14.5px;}
+.opt:hover{border-color:var(--teal);background:var(--teal-soft);}
+.opt.selected{border-color:var(--teal);background:var(--teal-soft);font-weight:700;}
+.opt input[type=radio]{accent-color:var(--teal);}
+.opt-letter{font-family:var(--mono);color:var(--gold);font-weight:700;min-width:20px;}
 
-  /* code block display */
-  .code-block{background:var(--ink);color:#E6E8EB;font-family:var(--mono);font-size:13px;line-height:1.7;padding:18px 20px;border-radius:8px;overflow-x:auto;direction:ltr;text-align:left;margin:14px 0;white-space:pre;}
+/* ── TRUE/FALSE ── */
+.tf-row{display:flex;gap:10px;margin-bottom:4px;}
+.tf-btn{flex:1;padding:11px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:15px;transition:all .15s;cursor:pointer;}
+.tf-btn.sel-true{border-color:var(--teal);background:var(--teal-soft);color:var(--teal);}
+.tf-btn.sel-false{border-color:var(--rust);background:var(--rust-soft);color:var(--rust);}
 
-  /* sub-questions */
-  .qsub{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);}
+/* ── FILL BLANK ── */
+.fill-inline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.fill-inline .fill-prefix{font-size:15px;font-weight:600;}
+.fill-input{padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;width:200px;outline:none;transition:border-color .15s;}
+.fill-input:focus{border-color:var(--teal);}
+.fill-input.filled{border-color:var(--teal);background:var(--teal-soft);}
 
-  /* footer */
-  .exam-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:14px 0;box-shadow:0 -6px 20px rgba(0,0,0,0.05);z-index:40;}
-  .exam-footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;}
-  .save-hint{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
-  .save-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+/* ── TEXT / CODE ── */
+textarea.answer-box{width:100%;min-height:88px;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:14.5px;resize:vertical;}
+textarea.answer-box:focus{outline:none;border-color:var(--teal);}
+textarea.answer-box.code{font-family:var(--mono);direction:ltr;text-align:left;background:#FAFAF6;min-height:70px;}
+.type-label{font-size:12px;color:var(--text-dim);margin-bottom:7px;display:block;font-family:var(--mono);}
 
-  /* done screen */
-  .done-screen{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px;background:var(--paper);}
-  .done-card{max-width:480px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:46px 34px;box-shadow:0 20px 50px -25px rgba(27,36,48,0.25);}
-  .done-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:30px;}
-  .done-card h2{font-size:22px;margin:0 0 10px;}
-  .done-card p{color:var(--text-dim);font-size:14.5px;margin-bottom:8px;}
-  .done-status{font-family:var(--mono);font-size:12.5px;margin-top:18px;padding:10px 14px;border-radius:8px;background:var(--paper-soft);color:var(--text-dim);}
+/* ── CODE BLOCK ── */
+.code-block{background:var(--ink);color:#E6E8EB;font-family:var(--mono);font-size:12.5px;line-height:1.7;padding:16px 18px;border-radius:8px;overflow-x:auto;direction:ltr;text-align:left;margin:12px 0;white-space:pre;}
 
-  @media(max-width:640px){
-    .boot-card{padding:28px 22px;}
-    .q-card{padding:18px 16px;}
-    .compare-table{font-size:12.5px;}
-  }
+/* ── FOOTER ── */
+.exam-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:12px 0;box-shadow:0 -4px 16px rgba(0,0,0,0.05);z-index:40;}
+.exam-footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.save-hint{font-family:var(--mono);font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:5px;}
+.save-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+
+/* ── TIMEOUT OVERLAY ── */
+.timeout-overlay{position:fixed;inset:0;background:rgba(27,36,48,0.96);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.timeout-card{background:var(--ink-soft);border:1px solid rgba(200,85,61,0.5);border-radius:14px;padding:46px 36px;max-width:440px;width:100%;text-align:center;color:#fff;}
+.timeout-icon{font-size:48px;margin-bottom:16px;}
+.timeout-card h2{font-size:22px;margin:0 0 10px;color:#fff;}
+.timeout-card p{color:#AEB6C3;font-size:14px;margin-bottom:6px;}
+.timeout-status{font-family:var(--mono);font-size:12px;margin-top:18px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,0.06);color:#7A8392;}
+
+/* ── DONE SCREEN ── */
+.done-screen{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px;background:var(--paper);}
+.done-card{max-width:460px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:44px 32px;box-shadow:0 20px 50px -25px rgba(27,36,48,0.25);}
+.done-icon{width:62px;height:62px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:28px;}
+.done-card h2{font-size:21px;margin:0 0 10px;}
+.done-card p{color:var(--text-dim);font-size:14px;margin-bottom:6px;}
+.done-status{font-family:var(--mono);font-size:12px;margin-top:16px;padding:10px 14px;border-radius:8px;background:var(--paper-soft);color:var(--text-dim);}
+
+@media(max-width:620px){
+  .boot-card{padding:28px 20px;}
+  .q-card{padding:18px 16px;}
+  .timer-box{font-size:18px;padding:5px 12px;}
+  .fill-input{width:150px;}
+}
 </style>
 </head>
 <body>
 
-<!-- ============ SCREEN 1: LOGIN ============ -->
+<!-- ======= SCREEN 1: LOGIN ======= -->
 <div id="screen-login" class="screen">
   <div class="topbar">
     <div class="wrap">
-      <div class="brand"><span class="dot"></span><b>SEC2</b><span style="opacity:0.5">— النموذج الثاني</span></div>
-      <div class="session-pill">30 يونيو 2026</div>
+      <div class="brand"><span class="dot"></span><b>SEC2</b><span style="font-family:var(--mono);font-size:13px;opacity:0.5;margin-right:6px">— المراجعة الشاملة</span></div>
+      <div class="session-pill">01 يوليو 2026</div>
     </div>
   </div>
   <div class="boot">
     <div class="boot-card">
-      <div class="boot-head"><span>$</span><span>init exam_session --model=2<span class="blink">_</span></span></div>
-      <div class="boot-title">امتحان مراجعة — النموذج الثاني</div>
-      <div class="boot-sub">مادة SEC2 · أدخلي اسمك للبدء</div>
+      <div class="boot-head"><span>$</span><span>init exam --questions=20 --time=30min<span class="blink">_</span></span></div>
+      <div class="boot-title">امتحان المراجعة الشامل</div>
+      <div class="boot-sub">مادة SEC2 · 20 سؤالاً</div>
+      <div class="boot-warn">⏱ مدة الامتحان 30 دقيقة فقط — يُغلق تلقائياً عند انتهاء الوقت</div>
       <div class="field">
         <label>اسم الطالب</label>
-        <input type="text" id="studentNameInput" placeholder="مثال: شهد شمس الدين" autocomplete="off">
+        <input type="text" id="studentNameInput" placeholder="اكتب اسمك الكامل..." autocomplete="off">
         <div class="err-text" id="nameErr">من فضلك أدخلي اسمك للبدء.</div>
       </div>
-      <button class="btn btn-primary" onclick="startExam()">بدء الامتحان ←</button>
-      <div style="margin-top:16px;font-family:var(--mono);font-size:11.5px;color:#7A8392;text-align:center;">
-        📡 سيتم إخطار المعلم فور بدء الامتحان
+      <button class="btn btn-primary" onclick="startExam()">بدء الامتحان ← (30 دقيقة)</button>
+      <div style="margin-top:14px;font-family:var(--mono);font-size:11px;color:#7A8392;text-align:center;">
+        📡 سيتم إخطار المعلم فور بدء الامتحان وتتبع إجاباتك مباشرة
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============ SCREEN 2: EXAM ============ -->
+<!-- ======= SCREEN 2: EXAM ======= -->
 <div id="screen-exam" class="screen hidden">
   <div class="exam-header">
     <div class="wrap">
-      <div class="exam-header-row">
+      <div class="header-row">
         <div class="student-tag">الطالب: <b id="examStudentName">—</b></div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="tracker-badge"><span class="pulse"></span>مباشر</div>
-          <div class="progress-label" id="progressLabel">0 / 0</div>
+        <div class="timer-wrap">
+          <div>
+            <div class="timer-label">الوقت المتبقي</div>
+            <div class="timer-box" id="timerDisplay">30:00</div>
+          </div>
+          <div class="live-badge"><span class="pulse"></span>مباشر</div>
         </div>
       </div>
-      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-row">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label" id="progressLabel">0 / 20</div>
+      </div>
     </div>
   </div>
-  <div class="exam-body">
-    <div class="wrap" id="examContent"></div>
-  </div>
+  <div class="exam-body"><div class="wrap" id="examContent"></div></div>
   <div class="exam-footer">
     <div class="wrap">
-      <div class="save-hint"><span class="save-dot"></span>يُتابَع مباشرة</div>
+      <div class="save-hint"><span class="save-dot"></span>يُتابَع مباشرة على تيليجرام</div>
       <button class="btn btn-rust" onclick="confirmSubmit()">تسليم الامتحان ✓</button>
     </div>
   </div>
 </div>
 
-<!-- ============ SCREEN 3: DONE ============ -->
-<div id="screen-done" class="screen hidden">
-  <div class="topbar">
-    <div class="wrap">
-      <div class="brand"><span class="dot"></span><b>SEC2</b></div>
-    </div>
+<!-- ======= TIMEOUT OVERLAY ======= -->
+<div id="timeout-overlay" class="timeout-overlay hidden">
+  <div class="timeout-card">
+    <div class="timeout-icon">⏰</div>
+    <h2>انتهى وقت الامتحان</h2>
+    <p>تم تسليم الامتحان تلقائياً عند انتهاء الـ 30 دقيقة.</p>
+    <p>سيتم إرسال إجاباتك للمعلم الآن.</p>
+    <div class="timeout-status" id="timeoutStatus">جاري إرسال النتيجة...</div>
   </div>
+</div>
+
+<!-- ======= SCREEN 3: DONE ======= -->
+<div id="screen-done" class="screen hidden">
+  <div class="topbar"><div class="wrap"><div class="brand"><span class="dot"></span><b>SEC2</b></div></div></div>
   <div class="done-screen">
     <div class="done-card">
       <div class="done-icon">✓</div>
-      <h2>تم تسليم الامتحان بنجاح</h2>
-      <p>شكراً لك <b id="doneName"></b>، تم استلام إجاباتك.</p>
-      <p style="font-size:13px;">سيتم مراجعة إجاباتك من قِبل المعلم.</p>
-      <div class="done-status" id="doneStatus">جاري إرسال التسليم النهائي...</div>
+      <h2>تم تسليم الامتحان</h2>
+      <p>شكراً لك <b id="doneName"></b></p>
+      <p id="doneReason" style="font-size:13px;"></p>
+      <div class="done-status" id="doneStatus">جاري إرسال النتيجة...</div>
     </div>
   </div>
 </div>
 
 <script>
-/* ==============================================
-   CONFIG — ضع هنا بيانات البوت بتاعك
-============================================== */
+/* ================================================
+   CONFIG
+================================================ */
 const TELEGRAM_BOT_TOKEN = "8888997856:AAELxk8TtopV2IyCzgywShkn9DHHXVqJnLI";
 const TELEGRAM_CHAT_ID   = "1840535062";
+const EXAM_DURATION_SEC  = 30 * 60; // 30 minutes
 
-/* ==============================================
-   EXAM DATA
-============================================== */
+/* ================================================
+   EXAM DATA  — 20 سؤالاً
+================================================ */
 const EXAM = {
-  title: "امتحان مراجعة عامة — النموذج الثاني",
+  title: "امتحان المراجعة الشامل — SEC2",
   date: "01 يوليو 2026",
   sections: [
-    {
-      id: "s1",
-      title: "السؤال الأول: المصطلحات والمفاهيم",
-      points: 25,
-      questions: [
-        {
-          id: "q1_1", type: "text", points: 5,
-          text: "وضح المقصود بـ: الخادم كبرمجيات (Server Software)",
-          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
-          keywords: ["خادم","server","برنامج","طلبات","apache","nginx","استجابة"]
-        },
-        {
-          id: "q1_2", type: "text", points: 5,
-          text: "وضح المقصود بـ: لغات البرمجة من نوع Server-side",
-          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
-          keywords: ["خادم","server","تنفيذ","php","python","قبل","إرسال","متصفح"]
-        },
-        {
-          id: "q1_3", type: "text", points: 5,
-          text: "وضح المقصود بـ: المفتاح المركب (Composite Key)",
-          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
-          keywords: ["عمودين","حقلين","composite","مفتاح","فريد","أكثر من","تركيب"]
-        },
-        {
-          id: "q1_4", type: "text", points: 5,
-          text: "وضح المقصود بـ: المفتاح الأجنبي (Foreign Key) الذي يربط بين جدولين ويمنع تكرار البيانات.",
-          placeholder: "اكتب تعريفاً علمياً دقيقاً...",
-          keywords: ["مفتاح أجنبي","foreign key","يربط","جدولين","علاقة","تكرار","primary key","يشير"]
-        },
-        {
-          id: "q1_5", type: "text", points: 5,
-          text: "ما هو الفرق الأساسي بين الخادم (Server) والعميل (Client)؟",
-          placeholder: "اكتب الفرق بإيجاز...",
-          keywords: ["خادم","عميل","client","server","يستضيف","يطلب","يعرض","متصفح","يخزن البيانات"]
-        }
-      ]
-    },
-    {
-      id: "s2",
-      title: "السؤال الثاني: صل من العمود (أ) ما يناسبه من العمود (ب)",
-      points: 15,
-      questions: [
-        {
-          id: "q2_match", type: "matching", points: 15,
-          text: "صل كل مصطلح في العمود (أ) بما يناسبه من التعريف في العمود (ب):",
-          pairs: [
-            { left: "PHP", right: "لغة برمجة تعمل من جهة الخادم (Server-side)" },
-            { left: "Localhost", right: "العنوان المستخدم لتشغيل الموقع محلياً" },
-            { left: "Text", right: "نوع بيانات للنصوص الطويلة جداً" },
-            { left: "MySQL", right: "نظام إدارة قواعد البيانات" },
-            { left: "Aptana Studio", right: "برنامج محرر كود" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "s3",
-      title: "السؤال الثالث: المقارنات والتحليل",
-      points: 15,
-      questions: [
-        {
-          id: "q3_1", type: "compare-table", points: 10,
-          text: "قارن بين أنواع العلاقات التالية في قواعد البيانات:",
-          rows: ["One to Many","Many to Many"],
-          cols: ["كيفية الربط ومكان المفتاح الأجنبي","مثال من واقع مشروع القاموس"],
-          keywords: ["foreign key","linking table","جدول ربط","one to many","مفتاح أجنبي"]
-        },
-        {
-          id: "q3_2", type: "text", points: 5,
-          text: "اذكر ثلاثة أسباب جعلت المنهج يختار تطبيق MySQL لإنشاء قواعد البيانات في هذا المشروع.",
-          placeholder: "السبب الأول:\nالسبب الثاني:\nالسبب الثالث:",
-          keywords: ["مجاني","مفتوح","سريع","شائع","xampp","php","دعم","سهل"]
-        }
-      ]
-    },
-    {
-      id: "s4",
-      title: "السؤال الرابع: بيئة التطوير",
-      points: 17,
-      questions: [
-        {
-          id: "q4_1", type: "text", points: 6,
-          text: "ما هي المكونات الأربعة الأساسية التي توفرها حزمة XAMPP؟ وماذا يرمز كل حرف فيها؟",
-          placeholder: "X = \nA = \nM = \nP = \nP = ",
-          keywords: ["apache","mysql","php","perl","cross","linux","windows"]
-        },
-        {
-          id: "q4_2", type: "text", points: 4,
-          text: "لماذا نحتاج إلى استخدام http://localhost عند تشغيل صفحات PHP، ولا يمكننا فتحها مباشرة كملفات HTML؟",
-          placeholder: "اكتب السبب التقني...",
-          keywords: ["خادم","server","تفسير","تنفيذ","php","معالجة","apache","بروتوكول"]
-        },
-        {
-          id: "q4_3", type: "text", points: 3,
-          text: "ما اسم حزمة الويب التي تعمل على نظام الماك (Mac)؟",
-          placeholder: "اكتب اسم الحزمة...",
-          keywords: ["mamp","mac","ماك"]
-        },
-        {
-          id: "q4_4", type: "text", points: 4,
-          text: "تنقسم صفحات الويب إلى نوعين، اذكرهما ووضح الفرق بينهما بإيجاز.",
-          placeholder: "النوع الأول:\nالنوع الثاني:\nالفرق:",
-          keywords: ["ثابتة","متغيرة","ديناميكية","static","dynamic","html","php","تفاعل","تتغير"]
-        }
-      ]
-    },
-    {
-      id: "s5",
-      title: "السؤال الخامس: تحليل الكود والمنطق",
-      points: 20,
-      introCode: `function بحث_في_المصطلحات($قاعدة_البيانات, $كلمة_البحث, $التصنيف = '') {
-    $استعلام = "SELECT * FROM terms WHERE (name LIKE :search OR description LIKE :search2)";
-    $المعاملات = [
-        ':search'  => '%' . $كلمة_البحث . '%',
-        ':search2' => '%' . $كلمة_البحث . '%',
-    ];
 
-    if (!empty($التصنيف)) {
-        $استعلام .= " AND category = :category";
-        $المعاملات[':category'] = $التصنيف;
-    }
+    /* ── الجزء الأول: أسئلة قصيرة موضوعية ── */
+    {
+      id:"s1", title:"أولاً: الأسئلة القصيرة الموضوعية", points:75,
+      questions:[
 
-    $استعلام .= " ORDER BY name ASC";
-    $جملة = $قاعدة_البيانات->prepare($استعلام);
-    $جملة->execute($المعاملات);
-    return $جملة->fetchAll();
-}`,
-      questions: [
+        /* 1-5: MCQ */
         {
-          id: "q5_1", type: "text", points: 5,
-          text: "ما وظيفة الرمز % المستخدم في مصفوفة $المعاملات؟",
-          placeholder: "اشرح وظيفة % في LIKE...",
-          keywords: ["wildcard","أي حروف","بحث جزئي","أي نص","like","بداية","نهاية"]
+          id:"q1", type:"mcq", points:5,
+          text:"أي لغة برمجة تُنفذ من جهة الخادم (Server-side)؟",
+          options:[{k:"أ",t:"HTML"},{k:"ب",t:"PHP"},{k:"ج",t:"CSS"}],
+          correct:"ب"
         },
         {
-          id: "q5_2", type: "text", points: 5,
-          text: "لماذا يتم استخدام prepare() و execute() بدلاً من إرسال الاستعلام مباشرة؟",
-          placeholder: "اشرح السبب التقني والأمني...",
-          keywords: ["sql injection","حماية","prepared","أمان","معاملات","injection","هجوم"]
+          id:"q2", type:"mcq", points:5,
+          text:"ما هو الرمز المستخدم للبحث عن أي نص في SQL؟",
+          options:[{k:"أ",t:"%"},{k:"ب",t:"$"},{k:"ج",t:"&"}],
+          correct:"أ"
         },
         {
-          id: "q5_3", type: "text", points: 10,
-          text: "اشرح كيف يتعامل الكود مع حالة اختيار المستخدم لتصنيف معين أثناء البحث.",
-          placeholder: "اشرح المنطق البرمجي خطوة بخطوة...",
-          keywords: ["empty","if","category","يضاف","شرط","AND","معامل إضافي","التصنيف"]
+          id:"q3", type:"mcq", points:5,
+          text:"أي حزمة ويب مخصصة للعمل على نظام Windows؟",
+          options:[{k:"أ",t:"WAMP"},{k:"ب",t:"MAMP"},{k:"ج",t:"LAMP"}],
+          correct:"أ"
+        },
+        {
+          id:"q4", type:"mcq", points:5,
+          text:"نوع البيانات المناسب لتخزين الأرقام الصحيحة هو:",
+          options:[{k:"أ",t:"VarChar"},{k:"ب",t:"Integer"},{k:"ج",t:"Text"}],
+          correct:"ب"
+        },
+        {
+          id:"q5", type:"mcq", points:5,
+          text:"الدالة التي تبدأ الجلسة في PHP هي:",
+          options:[{k:"أ",t:"session_start()"},{k:"ب",t:"start_session()"},{k:"ج",t:"session_begin()"}],
+          correct:"أ"
+        },
+
+        /* 6-10: صح / خطأ */
+        {id:"q6",  type:"tf", points:5, text:"يمكن للمفتاح الأساسي (Primary Key) أن يتكرر في نفس الجدول.", correct:false},
+        {id:"q7",  type:"tf", points:5, text:"لغة HTML تُستخدم لبناء صفحات الويب الديناميكية.", correct:false},
+        {id:"q8",  type:"tf", points:5, text:"نستخدم $_GET لإرسال البيانات الحساسة مثل كلمات المرور.", correct:false},
+        {id:"q9",  type:"tf", points:5, text:"الخادم (Server) كجهاز هو حاسوب ذو مواصفات عالية يقدم خدمات للعملاء.", correct:true},
+        {id:"q10", type:"tf", points:5, text:"استخدام include يقلل من تكرار الكود ويسهل عملية التعديل.", correct:true},
+
+        /* 11-15: أكمل الفراغ */
+        {
+          id:"q11", type:"fill", points:5,
+          text:"العنوان الرقمي الافتراضي لـ Localhost هو",
+          suffix:"", correct:["127.0.0.1","٠.٠.١.٧٢١"]
+        },
+        {
+          id:"q12", type:"fill", points:5,
+          text:'يرمز حرف "M" في حزمة XAMPP إلى',
+          suffix:"", correct:["mysql","ماي إس كيو إل","MariaDB","mariadb"]
+        },
+        {
+          id:"q13", type:"fill", points:5,
+          text:"العلاقة التي تحتاج إلى جدول وسيط لتمثيلها هي",
+          suffix:"", correct:["many to many","many-to-many","متعدد لمتعدد","كثير لكثير"]
+        },
+        {
+          id:"q14", type:"fill", points:5,
+          text:"لتنظيف المدخلات من الفراغات الزائدة نستخدم الدالة",
+          suffix:"في PHP", correct:["trim","trim()"]
+        },
+        {
+          id:"q15", type:"fill", points:5,
+          text:"الاستعلام المستخدم لحذف بيانات من الجدول هو",
+          suffix:"", correct:["delete","delete from","DELETE","DELETE FROM"]
         }
       ]
     },
+
+    /* ── الجزء الثاني: أسئلة طويلة ── */
     {
-      id: "s6",
-      title: "السؤال السادس: قواعد البيانات وSQL",
-      points: 27,
-      questions: [
+      id:"s2", title:"ثانياً: الأسئلة الطويلة التحليلية والعملية", points:50,
+      questions:[
         {
-          id: "q6_1", type: "code", points: 6,
-          text: "اكتب استعلام SQL لحذف المصطلح الذي يحمل الاسم 'Legacy System' من جدول terms.",
-          placeholder: "-- اكتب استعلام DELETE هنا",
-          keywords: ["delete from","where","name","legacy system"]
+          id:"q16", type:"text", points:10,
+          text:"اشرح الفرق الجوهري بين صفحات الويب الساكنة (Static) والديناميكية (Dynamic) من حيث التفاعل مع قاعدة البيانات.",
+          placeholder:"اكتب الشرح هنا...",
+          keywords:["ثابت","static","متغير","dynamic","قاعدة بيانات","خادم","تفاعل","php","html"]
         },
         {
-          id: "q6_2", type: "code", points: 7,
-          text: "اكتب استعلام SQL لجلب جميع المصطلحات من تصنيف 'networks' مرتبة تنازلياً حسب date_added.",
-          placeholder: "-- اكتب استعلام SELECT هنا",
-          keywords: ["select","from terms","where","category","networks","order by","desc","date_added"]
+          id:"q17", type:"text", points:10,
+          text:"لماذا نفضل تخزين اسم ملف الصورة في قاعدة البيانات بدلاً من تخزين ملف الصورة نفسه؟ وضح الأثر على أداء الموقع.",
+          placeholder:"اكتب الإجابة هنا...",
+          keywords:["اسم الملف","حجم","أداء","ثقيل","varchar","مسار","path","سريع","تخزين"]
         },
         {
-          id: "q6_3", type: "code", points: 7,
-          text: "اكتب استعلام SQL لإضافة حقل 'عدد مرات مشاهدة المصطلح' إلى جدول terms مع تحديد نوع البيانات المناسب.",
-          placeholder: "-- اكتب استعلام ALTER TABLE هنا",
-          keywords: ["alter table","add","int","integer","views","default","0"]
+          id:"q18", type:"code", points:10,
+          text:"اكتب استعلام SQL كاملاً لإنشاء جدول باسم categories يحتوي على: id (مفتاح أساسي تلقائي) و cat_name (نصي).",
+          placeholder:"-- CREATE TABLE ...",
+          keywords:["create table","categories","primary key","auto_increment","varchar","cat_name","id"]
         },
         {
-          id: "q6_4", type: "code", points: 7,
-          text: "اكتب استعلام SQL للبحث عن جميع المصطلحات التي تبدأ بحرف 'A' في جدول terms.",
-          placeholder: "-- اكتب استعلام SELECT مع LIKE هنا",
-          keywords: ["select","from terms","where","name like","'a%'","like"]
-        }
-      ]
-    },
-    {
-      id: "s7",
-      title: "السؤال السابع: الربط والتكامل",
-      points: 20,
-      questions: [
-        {
-          id: "q7_1", type: "text", points: 10,
-          text: "في ملف db.php يتم استخدام try...catch. ما فائدة هذا التركيب عند محاولة الاتصال بقاعدة البيانات؟",
-          placeholder: "اشرح الفائدة بالتفصيل...",
-          keywords: ["خطأ","exception","استثناء","اتصال فاشل","معالجة","رسالة","يتوقف","catch","try"]
+          id:"q19", type:"text", points:10,
+          text:"اشرح كيف يتم استخدام الجلسات (Sessions) للتحقق من أن المستخدم الذي يحاول الدخول لصفحة الإدارة هو معلم وليس طالباً.",
+          placeholder:"اشرح الآلية خطوة بخطوة...",
+          keywords:["session","جلسة","session_start","تحقق","redirect","header","معلم","صلاحية","role"]
         },
         {
-          id: "q7_2", type: "text", points: 10,
-          text: "اشرح كيف تستخدم $_POST في login.php للتحقق من بيانات المستخدم، وكيف يتم منع الوصول لـ manage.php إذا لم يكن المستخدم معلماً.",
-          placeholder: "اشرح آلية تسجيل الدخول والحماية...",
-          keywords: ["post","session","جلسة","redirect","header","تحقق","password","حماية","معلم"]
-        }
-      ]
-    },
-    {
-      id: "s8",
-      title: "السؤال الثامن: تصميم القاموس",
-      points: 20,
-      questions: [
-        {
-          id: "q8_1", type: "text", points: 10,
-          text: "جدول المصطلحات في المشروع يحتوي على حقل للصورة باسم image. هل يتم تخزين 'ملف الصورة' نفسه داخل قاعدة البيانات أم 'اسم الملف' فقط؟ ولماذا؟",
-          placeholder: "اكتب إجابتك مع التعليل...",
-          keywords: ["اسم الملف","filename","مسار","path","لا يُخزن","حجم كبير","أداء","performance","مجلد","uploads"]
-        },
-        {
-          id: "q8_2", type: "text", points: 10,
-          text: "اذكر فائدة واحدة لاستخدام 'التصنيفات' (Categories) للمصطلحات في الموقع.",
-          placeholder: "اكتب الفائدة...",
-          keywords: ["تسهيل البحث","تصنيف","تنظيم","سهولة التصفح","فلترة","filter","تجربة المستخدم","تجميع"]
+          id:"q20", type:"text", points:10,
+          text:"لماذا نستخدم prepare() و execute() عند التعامل مع استعلامات SQL في PHP؟ اشرح كيف تحمي هذه الطريقة الموقع من الاختراق.",
+          placeholder:"اشرح الأسباب الأمنية...",
+          keywords:["sql injection","حماية","prepared","أمان","injection","هجوم","معاملات","اختراق","prepare"]
         }
       ]
     }
   ]
 };
 
-/* ==============================================
+/* ================================================
    STATE
-============================================== */
-let studentName = null;
-let answers = {};
-let questionStartTimes = {};  // qid -> timestamp when student first focused
-let telegramMsgId = null;     // ID of the live-tracking message we keep editing
-let lastEditText = "";        // avoid redundant edits with same content
-let editQueue = Promise.resolve(); // serialize edits to avoid Telegram 429
-let examStartTime = null;
+================================================ */
+let studentName    = null;
+let answers        = {};
+let qStartTimes    = {};    // qid → timestamp (first focus)
+let telegramMsgId  = null;
+let lastEditText   = "";
+let editQueue      = Promise.resolve();
+let editDebTimer   = null;
+let examStartTime  = null;
+let timerInterval  = null;
+let secondsLeft    = EXAM_DURATION_SEC;
+let examOver       = false;  // guard against double-submit
 
-/* ==============================================
-   FLATTEN QUESTIONS
-============================================== */
-function flattenQ() {
-  const list = [];
-  EXAM.sections.forEach(sec => {
-    sec.questions.forEach(q => list.push({ sec, q }));
-  });
+/* ================================================
+   FLATTEN + TOTALS
+================================================ */
+function flattenQ(){
+  const list=[];
+  EXAM.sections.forEach(sec=>sec.questions.forEach(q=>list.push({sec,q})));
   return list;
 }
-const ALL_Q = flattenQ();
-const TOTAL_POINTS = EXAM.sections.reduce((s, sec) => s + sec.points, 0);
+const ALL_Q       = flattenQ();
+const TOTAL_Q     = ALL_Q.length;
+const TOTAL_PTS   = EXAM.sections.reduce((s,sec)=>s+sec.points,0);
 
-/* ==============================================
+/* ================================================
    UTILS
-============================================== */
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-}
-function esc(str) {
-  return (str || "").toString()
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-function md(str) {
-  return (str || "").toString().replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
-}
-function now() { return new Date().toLocaleTimeString('ar-EG'); }
-function elapsed(startTs) {
-  if (!startTs) return "—";
-  const sec = Math.round((Date.now() - startTs) / 1000);
-  if (sec < 60) return `${sec}ث`;
-  return `${Math.floor(sec/60)}د ${sec%60}ث`;
-}
-function saveDraft() {
-  try { localStorage.setItem("sec2_exam2_draft_" + studentName, JSON.stringify(answers)); } catch(e) {}
-}
-function loadDraft(name) {
-  try { return JSON.parse(localStorage.getItem("sec2_exam2_draft_" + name) || "{}"); } catch(e) { return {}; }
-}
-function clearDraft() {
-  try { localStorage.removeItem("sec2_exam2_draft_" + studentName); } catch(e) {}
+================================================ */
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function esc(s){return(s||"").toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function md(s){return(s||"").toString().replace(/([_*\[\]()~`>#+\-=|{}.!])/g,"\\$1");}
+function nowStr(){return new Date().toLocaleTimeString("ar-EG");}
+function fmtSec(s){const m=Math.floor(s/60),r=s%60;return`${String(m).padStart(2,"0")}:${String(r).padStart(2,"0")}`;}
+function elapsedStr(ts){if(!ts)return"—";const s=Math.round((Date.now()-ts)/1000);return s<60?`${s}ث`:`${Math.floor(s/60)}د ${s%60}ث`;}
+function saveDraft(){try{localStorage.setItem("sec2_sha_"+studentName,JSON.stringify(answers));}catch(e){}}
+function clearDraft(){try{localStorage.removeItem("sec2_sha_"+studentName);}catch(e){}}
+
+/* ================================================
+   TIMER
+================================================ */
+function startTimer(){
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    secondsLeft--;
+    updateTimerDisplay();
+    if(secondsLeft<=0){
+      clearInterval(timerInterval);
+      triggerTimeout();
+    }
+  },1000);
 }
 
-/* ==============================================
+function updateTimerDisplay(){
+  const el=document.getElementById("timerDisplay");
+  if(!el)return;
+  el.textContent=fmtSec(Math.max(0,secondsLeft));
+  el.className="timer-box";
+  if(secondsLeft<=300&&secondsLeft>60) el.classList.add("warn");  // last 5 min
+  else if(secondsLeft<=60) el.classList.add("danger");             // last 1 min
+}
+
+function triggerTimeout(){
+  if(examOver) return;
+  examOver=true;
+  clearInterval(timerInterval);
+  // Show overlay
+  document.getElementById("timeout-overlay").classList.remove("hidden");
+  // Submit silently
+  doSubmit("انتهى الوقت — تم التسليم التلقائي بعد 30 دقيقة.");
+}
+
+/* ================================================
    GRADING ENGINE
-============================================== */
-function grade(studentAnswers) {
-  let total = 0;
-  const results = ALL_Q.map(({ sec, q }) => {
-    const raw = studentAnswers[q.id];
-    let item = { id: q.id, text: q.text, max: q.points, earned: 0, status: "bad", answer: "(لم يُجب)" };
+================================================ */
+function gradeQ(q,raw){
+  if(!raw&&raw!==false) return{earned:0,status:"bad",display:"(لم يُجب)"};
+  if(q.type==="mcq"){
+    const ok=raw===q.correct;
+    return{earned:ok?q.points:0, status:ok?"ok":"bad", display:raw||"(لم يختر)"};
+  }
+  if(q.type==="tf"){
+    const ok=raw===q.correct;
+    return{earned:ok?q.points:0, status:ok?"ok":"bad", display:raw===true?"صح":raw===false?"خطأ":"(لم يختر)"};
+  }
+  if(q.type==="fill"){
+    const v=(raw||"").toString().trim().toLowerCase();
+    if(!v) return{earned:0,status:"bad",display:"(لم يجب)"};
+    const ok=q.correct.some(c=>v.includes(c.toLowerCase()));
+    return{earned:ok?q.points:0, status:ok?"ok":"review", display:raw.toString().trim()};
+  }
+  // text / code
+  const v=(raw||"").toString().trim();
+  if(!v) return{earned:0,status:"bad",display:"(لم يجب)"};
+  const lower=v.toLowerCase();
+  const hits=q.keywords.filter(k=>lower.includes(k.toLowerCase())).length;
+  const ratio=q.keywords.length?hits/q.keywords.length:0.5;
+  const earned=Math.round(q.points*Math.min(ratio+0.2,1)*10)/10;
+  return{earned, status:"review", display:v.length>90?v.slice(0,90)+"…":v};
+}
 
-    if (q.type === "matching") {
-      const sel = raw || {};
-      const answeredCount = Object.values(sel).filter(v => v && v.trim()).length;
-      if (!answeredCount) {
-        item.status = "bad"; item.earned = 0;
-      } else {
-        const correct = q.pairs.filter((p, i) => sel[i] === p.right).length;
-        item.answer = `${correct} / ${q.pairs.length} صحيحة`;
-        item.earned = Math.round(q.points * (correct / q.pairs.length) * 10) / 10;
-        item.status = correct === q.pairs.length ? "good" : "review";
-      }
-      total += item.earned;
-      return item;
-    }
-
-    let text = "";
-    if (q.type === "compare-table") {
-      text = Object.values(raw || {}).join(" ").toLowerCase();
-    } else {
-      text = (raw || "").toString().trim().toLowerCase();
-    }
-
-    if (!text) {
-      item.status = "bad"; item.earned = 0;
-    } else {
-      item.answer = q.type === "compare-table" ? "(جدول مُعبأ)" : (raw || "").toString().trim();
-      const hits = q.keywords.filter(k => text.includes(k.toLowerCase())).length;
-      const ratio = q.keywords.length ? hits / q.keywords.length : 0.5;
-      item.earned = Math.round(q.points * Math.min(ratio + 0.2, 1) * 10) / 10;
-      item.status = "review";
-    }
-    total += item.earned;
-    return item;
+function gradeAll(studentAnswers){
+  let auto=0,manual=0;
+  const results=ALL_Q.map(({q})=>{
+    const r=gradeQ(q,studentAnswers[q.id]);
+    if(q.type==="mcq"||q.type==="tf"||q.type==="fill") auto+=r.earned;
+    else manual+=r.earned;
+    return{id:q.id,text:q.text,max:q.points,...r};
   });
-  return { total: Math.round(total * 10) / 10, max: TOTAL_POINTS, results };
+  return{auto:Math.round(auto*10)/10, manual:Math.round(manual*10)/10, max:TOTAL_PTS, results};
 }
 
-/* ==============================================
-   ANSWER SUMMARY FOR TELEGRAM (compact)
-============================================== */
-function answerSummaryLine(q) {
-  const raw = answers[q.id];
-  if (!raw) return "❌ لم يُجب";
-  if (q.type === "matching") {
-    const vals = Object.values(raw).filter(v => v && v.trim());
-    return vals.length ? `✍ (مطابقة: ${vals.length}/${q.pairs.length} مُختارة)` : "❌ لم يُجب";
-  }
-  if (q.type === "compare-table") {
-    const vals = Object.values(raw).filter(v => v && v.trim());
-    return vals.length ? `✍ (جدول: ${vals.length} خلية مُعبأة)` : "❌ لم يُجب";
-  }
-  const txt = (raw || "").toString().trim();
-  if (!txt) return "❌ لم يُجب";
-  return `✍ ${txt.length > 80 ? txt.slice(0, 80) + "…" : txt}`;
+/* ================================================
+   IS ANSWERED
+================================================ */
+function isAnswered(q){
+  const r=answers[q.id];
+  if(r===undefined||r===null) return false;
+  if(q.type==="tf") return r===true||r===false;
+  return r.toString().trim().length>0;
 }
 
-/* ==============================================
-   BUILD LIVE TELEGRAM MESSAGE TEXT
-============================================== */
-function buildLiveText(phase) {
-  // phase: "start" | "progress" | "final"
-  const lines = [];
-  const elapsed_total = examStartTime ? elapsed(examStartTime) : "—";
+/* ================================================
+   TELEGRAM
+================================================ */
+const TG_BASE=()=>`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
+const CONFIGURED=()=>TELEGRAM_BOT_TOKEN&&!TELEGRAM_BOT_TOKEN.includes("PUT_YOUR");
 
-  lines.push(`📡 *تتبع مباشر — ${md(EXAM.title)}*`);
+async function tgSend(text){
+  if(!CONFIGURED())return null;
+  try{
+    const r=await fetch(`${TG_BASE()}/sendMessage`,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text,parse_mode:"MarkdownV2"})});
+    const d=await r.json();
+    return d.ok?d.result.message_id:null;
+  }catch(e){return null;}
+}
+async function tgEdit(text){
+  if(!CONFIGURED()||!telegramMsgId)return;
+  if(text===lastEditText)return;
+  lastEditText=text;
+  try{
+    await fetch(`${TG_BASE()}/editMessageText`,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,message_id:telegramMsgId,text,parse_mode:"MarkdownV2"})});
+  }catch(e){}
+}
+function scheduleEdit(phase){
+  if(editDebTimer) clearTimeout(editDebTimer);
+  editDebTimer=setTimeout(()=>{
+    editQueue=editQueue.then(async()=>await tgEdit(buildMsg(phase)));
+  },1500);
+}
+
+/* ================================================
+   TELEGRAM MESSAGE BUILDER
+================================================ */
+function buildMsg(phase){
+  const lines=[];
+  const elapsed=examStartTime?elapsedStr(examStartTime):"—";
+  const timeUsed=examStartTime?Math.round((Date.now()-examStartTime)/1000):0;
+  const timeLeft=Math.max(0,EXAM_DURATION_SEC-timeUsed);
+
+  lines.push(`📡 *${md(EXAM.title)}*`);
   lines.push(`👤 الطالب: *${md(studentName)}*`);
-  lines.push(`📅 التاريخ: ${md(EXAM.date)}`);
+  lines.push(`📅 ${md(EXAM.date)}`);
 
-  if (phase === "start") {
-    lines.push(`🟢 بدأ الامتحان الساعة: ${now()}`);
+  if(phase==="start"){
+    lines.push(`🟢 بدأ الساعة: ${nowStr()}`);
+    lines.push(`⏱ مدة الامتحان: 30 دقيقة`);
     lines.push(`⏳ انتظر إجابات الطالب\\.\\.\\.`);
     return lines.join("\n");
   }
 
-  if (phase === "final") {
-    const g = grade(answers);
-    lines.push(`🏁 *تم التسليم* الساعة: ${now()}`);
-    lines.push(`⏱ الوقت الإجمالي: ${elapsed_total}`);
-    lines.push(`📊 الدرجة التلقائية التقريبية: *${g.total} / ${g.max}*`);
-    lines.push(`🟡 = يحتاج مراجعة يدوية`);
+  if(phase==="final"||phase==="timeout"){
+    const g=gradeAll(answers);
+    const icon=phase==="timeout"?"⏰":"🏁";
+    lines.push(phase==="timeout"?`⏰ *انتهى الوقت — تسليم تلقائي* الساعة: ${nowStr()}`:`🏁 *تم التسليم* الساعة: ${nowStr()}`);
+    lines.push(`⏱ الوقت المستغرق: ${elapsed}`);
+    lines.push(`━━━━━━━━━━━━━━━`);
+    lines.push(`📊 *ملخص الدرجات:*`);
+    lines.push(`✅ الأسئلة الموضوعية \\(تصحيح تلقائي\\): *${g.auto} / 75*`);
+    lines.push(`🟡 الأسئلة المقالية \\(تحتاج مراجعة\\): *${g.manual} / 50* \\(تقريبي\\)`);
+    lines.push(`📈 المجموع التقريبي: *${Math.round((g.auto+g.manual)*10)/10} / ${g.max}*`);
     lines.push(`━━━━━━━━━━━━━━━`);
 
-    let qNum = 0;
-    EXAM.sections.forEach(sec => {
-      lines.push(``);
-      lines.push(`*${md(sec.title)}* \\(${sec.points} د\\)`);
-      sec.questions.forEach(q => {
-        qNum++;
-        const r = g.results.find(x => x.id === q.id);
-        const timeSpent = questionStartTimes[q.id] ? elapsed(questionStartTimes[q.id]) : "—";
-        lines.push(`${qNum}\\. 🟡 *${md(q.text.length > 55 ? q.text.slice(0,55)+"…" : q.text)}*`);
-        lines.push(`   ↳ الإجابة: ${md(r ? r.answer.slice(0,100) : "(لم يُجب)")}`);
-        lines.push(`   ↳ الوقت على السؤال: ${timeSpent} | درجة تقريبية: ${r ? r.earned : 0}/${q.points}`);
-      });
+    // Section 1: short questions (auto-graded) — compact
+    lines.push(`\n*أولاً: الأسئلة القصيرة*`);
+    const shortQs=ALL_Q.filter(({q})=>["mcq","tf","fill"].includes(q.type));
+    shortQs.forEach(({q},n)=>{
+      const r=g.results.find(x=>x.id===q.id);
+      const icon2=r.status==="ok"?"✅":"❌";
+      const shortT=q.text.length>45?q.text.slice(0,45)+"…":q.text;
+      lines.push(`${icon2} *${n+1}\\.* ${md(shortT)}`);
+      lines.push(`   ↳ ${md(r.display)} | ${r.earned}/${q.points}د`);
     });
-    lines.push(``);
-    lines.push(`━━━━━━━━━━━━━━━`);
-    lines.push(`⚠️ راجع جميع الأسئلة يدوياً \\(كل الأسئلة مقالية\\)\\.`);
+
+    // Section 2: long questions — full answer
+    lines.push(`\n*ثانياً: الأسئلة الطويلة \\(للمراجعة اليدوية\\)*`);
+    const longQs=ALL_Q.filter(({q})=>["text","code"].includes(q.type));
+    longQs.forEach(({q},n)=>{
+      const r=g.results.find(x=>x.id===q.id);
+      const shortT=q.text.length>55?q.text.slice(0,55)+"…":q.text;
+      lines.push(`🟡 *${n+16}\\.* ${md(shortT)}`);
+      const ans=(answers[q.id]||"").toString().trim();
+      lines.push(`   ↳ ${md(ans.length>120?ans.slice(0,120)+"…":ans||"(لم يجب)")}`);
+      lines.push(`   ↳ درجة تقريبية: ${r.earned}/${q.points}د`);
+    });
+
+    lines.push(`\n━━━━━━━━━━━━━━━`);
+    lines.push(`⚠️ راجع إجابات الأسئلة 16\\-20 يدوياً لتثبيت الدرجة النهائية\\.`);
     return lines.join("\n");
   }
 
-  // phase === "progress"
-  lines.push(`⏱ وقت منذ البداية: ${elapsed_total}`);
+  /* progress */
+  const done=ALL_Q.filter(({q})=>isAnswered(q)).length;
+  lines.push(`⏱ وقت منذ البداية: ${elapsed} | متبقي: ${fmtSec(timeLeft)}`);
+  lines.push(`📊 ${done} / ${TOTAL_Q} سؤال أُجيب عليه`);
   lines.push(`━━━━━━━━━━━━━━━`);
 
-  let qNum = 0;
-  let answered = 0;
-  EXAM.sections.forEach(sec => {
-    lines.push(``);
-    lines.push(`*${md(sec.title)}*`);
-    sec.questions.forEach(q => {
-      qNum++;
-      const hasAnswer = isAnswered(q);
-      if (hasAnswer) answered++;
-      const icon = hasAnswer ? "✅" : (questionStartTimes[q.id] ? "✍" : "⬜");
-      const timeLabel = questionStartTimes[q.id] ? ` \\[${elapsed(questionStartTimes[q.id])}\\]` : "";
-      const ansLine = answerSummaryLine(q);
-      lines.push(`${icon} *${qNum}\\.* ${md(q.text.length > 50 ? q.text.slice(0,50)+"…" : q.text)}${timeLabel}`);
-      if (hasAnswer || questionStartTimes[q.id]) {
-        lines.push(`   ${md(ansLine)}`);
+  let n=0;
+  EXAM.sections.forEach(sec=>{
+    lines.push(`\n*${md(sec.title)}*`);
+    sec.questions.forEach(q=>{
+      n++;
+      const has=isAnswered(q);
+      if(has) {}
+      const icon2=has?"✅":(qStartTimes[q.id]?"✍":"⬜");
+      const tLabel=qStartTimes[q.id]?` \\[${elapsedStr(qStartTimes[q.id])}\\]`:"";
+      const shortT=q.text.length>46?q.text.slice(0,46)+"…":q.text;
+      lines.push(`${icon2} *${n}\\.* ${md(shortT)}${tLabel}`);
+      if(has){
+        const r=gradeQ(q,answers[q.id]);
+        // for auto-graded show answer inline
+        if(["mcq","tf","fill"].includes(q.type)){
+          lines.push(`   ${r.status==="ok"?"✅":"❌"} ${md(r.display)}`);
+        } else {
+          const v=(answers[q.id]||"").toString().trim();
+          lines.push(`   ✍ ${md(v.length>60?v.slice(0,60)+"…":v)}`);
+        }
       }
     });
   });
-
-  lines.push(``);
-  lines.push(`━━━━━━━━━━━━━━━`);
-  lines.push(`📊 ${answered} / ${ALL_Q.length} سؤال أُجيب عليه`);
   return lines.join("\n");
 }
 
-/* ==============================================
-   TELEGRAM API CALLS
-============================================== */
-const TG_BASE = () => `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
-const CONFIGURED = () => TELEGRAM_BOT_TOKEN && !TELEGRAM_BOT_TOKEN.includes("PUT_YOUR");
-
-async function tgSend(text) {
-  if (!CONFIGURED()) return null;
-  try {
-    const r = await fetch(`${TG_BASE()}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text, parse_mode: "MarkdownV2", disable_notification: false })
-    });
-    const data = await r.json();
-    return data.ok ? data.result.message_id : null;
-  } catch(e) { console.error("tgSend", e); return null; }
-}
-
-async function tgEdit(text) {
-  if (!CONFIGURED() || !telegramMsgId) return;
-  if (text === lastEditText) return; // no change
-  lastEditText = text;
-  try {
-    await fetch(`${TG_BASE()}/editMessageText`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, message_id: telegramMsgId, text, parse_mode: "MarkdownV2" })
-    });
-  } catch(e) { console.error("tgEdit", e); }
-}
-
-// Queue edits with 1.5s debounce to respect Telegram rate limit (max 1 edit/sec per message)
-let editDebounceTimer = null;
-function scheduleEdit(phase) {
-  if (editDebounceTimer) clearTimeout(editDebounceTimer);
-  editDebounceTimer = setTimeout(() => {
-    editQueue = editQueue.then(async () => {
-      const text = buildLiveText(phase);
-      await tgEdit(text);
-    });
-  }, 1500);
-}
-
-/* ==============================================
-   EXAM FLOW
-============================================== */
-async function startExam() {
-  const input = document.getElementById("studentNameInput");
-  const name = input.value.trim();
-  const err = document.getElementById("nameErr");
-  if (!name) { err.style.display = "block"; return; }
-  err.style.display = "none";
-
-  studentName = name;
-  examStartTime = Date.now();
-  answers = loadDraft(name);
-  document.getElementById("examStudentName").textContent = name;
-
+/* ================================================
+   RENDER EXAM
+================================================ */
+async function startExam(){
+  const input=document.getElementById("studentNameInput");
+  const name=input.value.trim();
+  const err=document.getElementById("nameErr");
+  if(!name){err.style.display="block";return;}
+  err.style.display="none";
+  studentName=name;
+  examStartTime=Date.now();
+  document.getElementById("examStudentName").textContent=name;
   renderExam();
   show("screen-exam");
-
-  // Send first Telegram message and store its ID
-  telegramMsgId = await tgSend(buildLiveText("start"));
-  // Immediately update to show question list
-  setTimeout(() => scheduleEdit("progress"), 2000);
+  startTimer();
+  telegramMsgId=await tgSend(buildMsg("start"));
+  setTimeout(()=>scheduleEdit("progress"),2000);
 }
 
-function renderExam() {
-  const container = document.getElementById("examContent");
-  let html = "";
-  EXAM.sections.forEach(sec => {
-    html += `<div class="section-comment"><span>${esc(sec.title)}</span></div>`;
-    html += `<div class="section-points">${sec.points} درجة</div>`;
-    if (sec.introCode) {
-      html += `<div class="code-block">${esc(sec.introCode)}</div>`;
-    }
-    sec.questions.forEach((q, idx) => {
-      html += renderQCard(q, idx);
+function renderExam(){
+  const c=document.getElementById("examContent");
+  let h="",n=0;
+  EXAM.sections.forEach(sec=>{
+    h+=`<div class="section-header"><span class="section-title">${esc(sec.title)}</span><span class="line"></span></div>`;
+    h+=`<div class="section-pts">${sec.points} درجة</div>`;
+    sec.questions.forEach(q=>{
+      n++;
+      h+=renderCard(q,n);
     });
   });
-  container.innerHTML = html;
+  c.innerHTML=h;
   attachListeners();
   updateProgress();
 }
 
-function renderQCard(q, idx) {
-  const hasAns = isAnswered(q);
-  return `<div class="q-card ${hasAns ? 'answered' : ''}" id="card_${q.id}">
-    <div class="q-gutter">${idx + 1}</div>
-    <div class="q-text">${esc(q.text)}<span class="q-points">(${q.points} د)</span></div>
+function typeTag(type){
+  const map={mcq:"اختيار",tf:"صح/خطأ",fill:"أكمل",text:"شرح",code:"SQL"};
+  return map[type]||type;
+}
+
+function renderCard(q,n){
+  return`<div class="q-card" id="card_${q.id}">
+    <div class="q-num">${n}</div>
+    <div class="q-text">${esc(q.text)}<span class="q-type-tag">${typeTag(q.type)}</span><span class="q-pts"> (${q.points} د)</span></div>
     ${renderInput(q)}
   </div>`;
 }
 
-function renderInput(q) {
-  if (q.type === "compare-table") return renderCompareTable(q);
-  if (q.type === "matching") return renderMatching(q);
-  const isCode = q.type === "code";
-  const val = esc(answers[q.id] || "");
-  const cls = isCode ? "answer-box code" : "answer-box";
-  const dir = isCode ? 'dir="ltr" style="text-align:left"' : '';
-  const ph = esc(q.placeholder || "اكتب إجابتك هنا...");
-  return `<span class="type-label">${isCode ? "// SQL" : "إجابتك:"}</span>
-    <textarea class="answer-box ${isCode ? 'code' : ''}" ${dir} data-qid="${q.id}" placeholder="${ph}">${val}</textarea>`;
+function renderInput(q){
+  if(q.type==="mcq") return renderMcq(q);
+  if(q.type==="tf")  return renderTf(q);
+  if(q.type==="fill") return renderFill(q);
+  const isCode=q.type==="code";
+  const dir=isCode?'dir="ltr" style="text-align:left"':'';
+  return`<span class="type-label">${isCode?"// اكتب الاستعلام":"إجابتك:"}</span>
+    <textarea class="answer-box ${isCode?"code":""}" ${dir} data-qid="${q.id}" placeholder="${esc(q.placeholder||"اكتب هنا...")}"></textarea>`;
 }
 
-function renderCompareTable(q) {
-  const val = answers[q.id] || {};
-  let html = `<table class="compare-table"><thead><tr><th>نوع العلاقة</th>`;
-  q.cols.forEach(c => html += `<th>${esc(c)}</th>`);
-  html += `</tr></thead><tbody>`;
-  q.rows.forEach((row, rIdx) => {
-    html += `<tr><th style="white-space:nowrap;font-size:13px;">${esc(row)}</th>`;
-    q.cols.forEach((col, cIdx) => {
-      const key = `${rIdx}_${cIdx}`;
-      html += `<td><textarea class="compare-cell" data-qid="${q.id}" data-cell="${key}" placeholder="...">${esc(val[key] || "")}</textarea></td>`;
-    });
-    html += `</tr>`;
+function renderMcq(q){
+  let h=`<div class="opts" data-qid="${q.id}">`;
+  q.options.forEach(opt=>{
+    h+=`<label class="opt" data-key="${opt.k}">
+      <input type="radio" name="${q.id}" value="${opt.k}">
+      <span class="opt-letter">(${opt.k})</span><span>${esc(opt.t)}</span>
+    </label>`;
   });
-  html += `</tbody></table>`;
-  return html;
+  h+=`</div>`;
+  return h;
 }
 
-function shuffledRights(q) {
-  // deterministic shuffle so options don't reorder on re-render
-  const rights = q.pairs.map(p => p.right);
-  const out = rights.slice();
-  let seed = 0;
-  for (const ch of q.id) seed += ch.charCodeAt(0);
-  for (let i = out.length - 1; i > 0; i--) {
-    seed = (seed * 9301 + 49297) % 233280;
-    const j = Math.floor((seed / 233280) * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
-  }
-  return out;
+function renderTf(q){
+  return`<div class="tf-row" data-qid="${q.id}">
+    <button class="tf-btn" data-val="true">✓ صح</button>
+    <button class="tf-btn" data-val="false">✗ خطأ</button>
+  </div>`;
 }
 
-function renderMatching(q) {
-  const val = answers[q.id] || {};
-  const rightOptions = shuffledRights(q);
-  let html = `<div class="opts">`;
-  q.pairs.forEach((p, idx) => {
-    const selected = esc(val[idx] || "");
-    html += `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;">
-      <span class="opt-letter" style="min-width:auto;font-weight:700;color:var(--ink);">${esc(p.left)}</span>
-      <span style="color:var(--gold);">→</span>
-      <select class="match-select" data-qid="${q.id}" data-idx="${idx}" style="flex:1;min-width:180px;padding:8px 10px;border-radius:6px;border:1.5px solid var(--line);font-family:var(--sans);font-size:14px;">
-        <option value="">— اختر الإجابة —</option>
-        ${rightOptions.map(r => `<option value="${esc(r)}" ${esc(r) === selected ? "selected" : ""}>${esc(r)}</option>`).join("")}
-      </select>
-    </div>`;
-  });
-  html += `</div>`;
-  return html;
+function renderFill(q){
+  const suf=q.suffix?`<span style="font-size:15px;color:var(--text-dim)">${esc(q.suffix)}</span>`:"";
+  return`<div class="fill-inline">
+    <input class="fill-input" type="text" data-qid="${q.id}" placeholder="...">
+    ${suf}
+  </div>`;
 }
 
-/* ==============================================
-   EVENT LISTENERS + TRACKING
-============================================== */
-function attachListeners() {
-  // Text & code textareas
-  document.querySelectorAll("textarea.answer-box").forEach(ta => {
-    ta.addEventListener("focus", () => trackFocus(ta.dataset.qid));
-    ta.addEventListener("input", () => {
-      answers[ta.dataset.qid] = ta.value;
-      markAnswered(ta.dataset.qid);
-      saveDraft();
-      updateProgress();
-      scheduleEdit("progress");
+/* ================================================
+   EVENT LISTENERS
+================================================ */
+function attachListeners(){
+  // MCQ
+  document.querySelectorAll(".opts").forEach(group=>{
+    const qid=group.dataset.qid;
+    group.querySelectorAll(".opt").forEach(opt=>{
+      opt.addEventListener("click",()=>{
+        if(examOver)return;
+        trackFocus(qid);
+        answers[qid]=opt.dataset.key;
+        group.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected"));
+        opt.classList.add("selected");
+        opt.querySelector("input").checked=true;
+        markAnswered(qid); saveDraft(); updateProgress(); scheduleEdit("progress");
+      });
     });
   });
 
-  // Matching selects
-  document.querySelectorAll("select.match-select").forEach(sel => {
-    sel.addEventListener("focus", () => trackFocus(sel.dataset.qid));
-    sel.addEventListener("change", () => {
-      const qid = sel.dataset.qid;
-      if (!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
-      answers[qid][sel.dataset.idx] = sel.value;
-      markAnswered(qid);
-      saveDraft();
-      updateProgress();
-      scheduleEdit("progress");
+  // T/F
+  document.querySelectorAll(".tf-row").forEach(row=>{
+    const qid=row.dataset.qid;
+    row.querySelectorAll(".tf-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        if(examOver)return;
+        trackFocus(qid);
+        const val=btn.dataset.val==="true";
+        answers[qid]=val;
+        row.querySelectorAll(".tf-btn").forEach(b=>b.className="tf-btn");
+        btn.classList.add(val?"sel-true":"sel-false");
+        markAnswered(qid); saveDraft(); updateProgress(); scheduleEdit("progress");
+      });
     });
   });
 
-  // Compare table cells
-  document.querySelectorAll("textarea.compare-cell").forEach(ta => {
-    ta.addEventListener("focus", () => trackFocus(ta.dataset.qid));
-    ta.addEventListener("input", () => {
-      const qid = ta.dataset.qid;
-      if (!answers[qid] || typeof answers[qid] !== "object") answers[qid] = {};
-      answers[qid][ta.dataset.cell] = ta.value;
-      markAnswered(qid);
-      saveDraft();
-      updateProgress();
-      scheduleEdit("progress");
+  // Fill
+  document.querySelectorAll("input.fill-input").forEach(inp=>{
+    inp.addEventListener("focus",()=>{if(!examOver)trackFocus(inp.dataset.qid);});
+    inp.addEventListener("input",()=>{
+      if(examOver)return;
+      answers[inp.dataset.qid]=inp.value;
+      inp.classList.toggle("filled",!!inp.value.trim());
+      markAnswered(inp.dataset.qid); saveDraft(); updateProgress(); scheduleEdit("progress");
+    });
+  });
+
+  // Text / Code
+  document.querySelectorAll("textarea.answer-box").forEach(ta=>{
+    ta.addEventListener("focus",()=>{if(!examOver)trackFocus(ta.dataset.qid);});
+    ta.addEventListener("input",()=>{
+      if(examOver)return;
+      answers[ta.dataset.qid]=ta.value;
+      markAnswered(ta.dataset.qid); saveDraft(); updateProgress(); scheduleEdit("progress");
     });
   });
 }
 
-function trackFocus(qid) {
-  if (!questionStartTimes[qid]) {
-    questionStartTimes[qid] = Date.now();
-    // Mark card as active
-    document.querySelectorAll(".q-card").forEach(c => c.classList.remove("active"));
-    const card = document.getElementById("card_" + qid);
-    if (card) card.classList.add("active");
-    scheduleEdit("progress"); // send update when student opens a new question
+function trackFocus(qid){
+  if(!qStartTimes[qid]){
+    qStartTimes[qid]=Date.now();
+    document.querySelectorAll(".q-card").forEach(c=>c.classList.remove("active"));
+    const card=document.getElementById("card_"+qid);
+    if(card) card.classList.add("active");
+    scheduleEdit("progress");
   }
 }
-
-function markAnswered(qid) {
-  const card = document.getElementById("card_" + qid);
-  if (card) card.classList.add("answered");
+function markAnswered(qid){
+  const q=ALL_Q.find(x=>x.q.id===qid);
+  const card=document.getElementById("card_"+qid);
+  if(card&&q) card.classList.toggle("answered",isAnswered(q.q));
+}
+function updateProgress(){
+  const done=ALL_Q.filter(({q})=>isAnswered(q)).length;
+  document.getElementById("progressLabel").textContent=`${done} / ${TOTAL_Q}`;
+  document.getElementById("progressFill").style.width=`${(done/TOTAL_Q)*100}%`;
 }
 
-function isAnswered(q) {
-  const raw = answers[q.id];
-  if (!raw) return false;
-  if (q.type === "compare-table" || q.type === "matching") return Object.values(raw).some(v => v && v.trim());
-  return typeof raw === "string" && raw.trim().length > 0;
-}
-
-function updateProgress() {
-  const done = ALL_Q.filter(({ q }) => isAnswered(q)).length;
-  const total = ALL_Q.length;
-  document.getElementById("progressLabel").textContent = `${done} / ${total}`;
-  document.getElementById("progressFill").style.width = `${(done / total) * 100}%`;
-}
-
-/* ==============================================
+/* ================================================
    SUBMIT
-============================================== */
-function confirmSubmit() {
-  const done = ALL_Q.filter(({ q }) => isAnswered(q)).length;
-  const total = ALL_Q.length;
-  let msg = "هل أنتِ متأكدة من تسليم الامتحان؟ لا يمكن التعديل بعد التسليم.";
-  if (done < total) msg = `لم تُجيبي على ${total - done} سؤال بعد.\n` + msg;
-  if (confirm(msg)) submitExam();
+================================================ */
+function confirmSubmit(){
+  if(examOver)return;
+  const done=ALL_Q.filter(({q})=>isAnswered(q)).length;
+  let msg="هل أنتِ متأكدة من تسليم الامتحان؟";
+  if(done<TOTAL_Q) msg=`لم تُجيبي على ${TOTAL_Q-done} سؤال بعد.\n`+msg;
+  if(confirm(msg)){
+    examOver=true;
+    clearInterval(timerInterval);
+    doSubmit("تم التسليم بنجاح.");
+  }
 }
 
-async function submitExam() {
+async function doSubmit(reason){
   clearDraft();
-  document.getElementById("doneName").textContent = studentName;
-  show("screen-done");
+  const phase=reason.includes("انتهى الوقت")?"timeout":"final";
 
-  const statusEl = document.getElementById("doneStatus");
-  const finalText = buildLiveText("final");
-
-  // Clear debounce then do final edit
-  if (editDebounceTimer) clearTimeout(editDebounceTimer);
-  editQueue = editQueue.then(async () => {
-    await tgEdit(finalText);
-  });
-
+  // Cancel pending edit, do final immediately
+  if(editDebTimer) clearTimeout(editDebTimer);
+  editQueue=editQueue.then(async()=>await tgEdit(buildMsg(phase)));
   await editQueue;
 
-  if (!CONFIGURED()) {
-    statusEl.textContent = "تنبيه: لم يتم إعداد توكن تيليجرام بعد. الإجابات محفوظة مؤقتاً.";
-  } else {
-    statusEl.textContent = "تم إرسال التسليم النهائي للمعلم بنجاح ✓";
+  // Show done screen (after overlay for timeout)
+  document.getElementById("doneName").textContent=studentName||"";
+  document.getElementById("doneReason").textContent=reason;
+
+  const statusEl=document.getElementById(phase==="timeout"?"timeoutStatus":"doneStatus");
+  if(statusEl) statusEl.textContent=CONFIGURED()?"تم الإرسال بنجاح ✓":"تنبيه: لم يتم إعداد توكن تيليجرام.";
+
+  // For manual submit go directly to done screen
+  if(phase==="final"){
+    show("screen-done");
+    document.getElementById("doneStatus").textContent=CONFIGURED()?"تم إرسال النتيجة للمعلم بنجاح ✓":"لم يتم إعداد توكن تيليجرام.";
+  }
+  // For timeout: overlay is already shown, transition to done after 3s
+  if(phase==="timeout"){
+    setTimeout(()=>{
+      document.getElementById("timeout-overlay").classList.add("hidden");
+      show("screen-done");
+      document.getElementById("doneStatus").textContent=CONFIGURED()?"تم إرسال النتيجة للمعلم بنجاح ✓":"لم يتم إعداد توكن تيليجرام.";
+    },3000);
   }
 }
 
-/* ==============================================
-   INIT
-============================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  // Pre-fill student name if it was شهد
-  // (no auto-fill — student types their own name)
-});
+document.addEventListener("DOMContentLoaded",()=>{});
 </script>
 </body>
 </html>
